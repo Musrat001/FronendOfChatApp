@@ -12,15 +12,15 @@ function Footer() {
           <div>
             <NavLink to="/" className="flex items-center gap-3 mb-4">
               <div
-                className="w-10 h-10 rounded-xl bg-blue-600
-                           flex items-center justify-center
-                           text-white font-bold text-xl"
+                className="w-15 h-15 rounded-xl bg-blue-600
+                       flex items-center justify-center
+                       text-white font-bold text-xl px-2"
               >
-                Q
+                E&C
               </div>
 
               <span className="text-2xl font-bold text-white">
-                Quick<span className="text-blue-500">Chat</span>
+                Egg&Code<span className="text-blue-500">ChatApp</span>
               </span>
             </NavLink>
 
@@ -141,7 +141,7 @@ function Footer() {
         <div className="border-t border-gray-800 mt-10 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="text-sm text-gray-500">
-              © 2026 QuickChat. All rights reserved.
+              © 2026 Egg&OCode ChatApp. All rights reserved.
             </p>
 
             <p className="text-sm text-gray-500">

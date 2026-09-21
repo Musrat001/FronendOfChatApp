@@ -33,7 +33,7 @@ function Header() {
           >
             Home
           </NavLink>
-
+{/* 
           <NavLink
             to="/about"
             className={({ isActive }) =>
@@ -43,7 +43,7 @@ function Header() {
             }
           >
             About Us
-          </NavLink>
+          </NavLink> */}
 
           <NavLink
             to="/login"
