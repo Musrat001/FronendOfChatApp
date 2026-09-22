@@ -13,6 +13,7 @@ import Login from "./components/publicComponents/Login";
 import Profile from "./components/userComponents/Profile";
 import UserLayout from "./layouts/user/UserLayout";
 import Dashboard from "./components/userComponents/Dashboard";
+import UserHome from "./components/userComponents/UserHome";
 
 function App() {
   const router = createBrowserRouter(
@@ -25,6 +26,7 @@ function App() {
         </Route>
         <Route element={<UserLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/home" element={<UserHome />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>,

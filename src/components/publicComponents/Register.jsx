@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
@@ -9,19 +9,39 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // Later you can send this data to your backend
-    console.log({
+    const registerobj = {
       name,
       email,
       username,
       password,
-    });
+    };
+
+    try {
+      const response = await fetch("http://localhost:9838/api/v1/auth/signUp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registerobj),
+        credentials: "include",
+      });
+      const data = await response.json();
+      console.log(data);
+        
+      if (data.success == true) {
+        alert(data.message)
+        
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("Error while registering user", error.message);
+    }
 
     // After successful registration
-    navigate("/login");
   };
 
   return (
@@ -51,7 +71,7 @@ function Register() {
           className="rounded-2xl border border-gray-200
                      bg-white p-8 shadow-xl"
         >
-          <form onSubmit={handleRegister}>
+          <form>
             {/* Name */}
 
             <div className="mb-5">
@@ -161,6 +181,7 @@ function Register() {
                          transition
                          hover:bg-blue-700
                          active:scale-[0.98]"
+              onClick={handleRegister}
             >
               Create Account
             </button>

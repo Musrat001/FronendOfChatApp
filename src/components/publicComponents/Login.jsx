@@ -4,20 +4,40 @@ import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     // Later you can put your API/login logic here
-    console.log({
-      username,
+    const loginObj = {
+      identifier,
       password,
-    });
+    };
+
+    try {
+      const response = await fetch("http://localhost:9838/api/v1/auth/signIn", {
+        method: "POST",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify(loginObj),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success == true) {
+        alert(data.message);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.log("Error while logging in user");
+    }
 
     // After successful login
-    navigate("/dashboard");
   };
 
   return (
@@ -40,7 +60,7 @@ function Login() {
         {/* Card */}
 
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
-          <form onSubmit={handleLogin}>
+          <form>
             {/* Username */}
 
             <div className="mb-5">
@@ -54,8 +74,8 @@ function Login() {
               <input
                 type="text"
                 id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="Enter your username or email"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3
                            text-gray-900 outline-none
@@ -121,6 +141,7 @@ function Login() {
                          transition
                          hover:bg-blue-700
                          active:scale-[0.98]"
+              onClick={handleLogin}
             >
               Login
             </button>
