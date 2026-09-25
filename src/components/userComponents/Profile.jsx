@@ -28,7 +28,7 @@ function Profile() {
               Manage your ChapApp profile
             </p>
           </div>
-
+          {/* 
           <button
             className="
               flex items-center gap-2 rounded-xl
@@ -43,7 +43,7 @@ function Profile() {
           >
             <Settings size={18} />
             <span className="hidden sm:block">Settings</span>
-          </button>
+          </button> */}
         </div>
 
         {/* Profile Card */}
@@ -60,7 +60,7 @@ function Profile() {
           <div
             className="
               relative h-32
-              bg-gradient-to-r
+              bg-linear-to-r
               from-indigo-600
               via-purple-600
               to-pink-600
@@ -142,7 +142,7 @@ function Profile() {
               </button>
             </div>
 
-            {/* Stats */}
+            {/* Stats
             <div
               className="
                 mt-7 grid
@@ -167,7 +167,7 @@ function Profile() {
                 <p className="text-xl font-bold">32</p>
                 <p className="mt-1 text-xs text-slate-500">Groups</p>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
 
@@ -239,7 +239,7 @@ function Profile() {
           </div>
 
           {/* Account Settings */}
-          <div
+          {/* <div
             className="
               rounded-3xl
               border border-slate-800
@@ -248,8 +248,8 @@ function Profile() {
               backdrop-blur-xl
               sm:p-6
             "
-          >
-            <div className="mb-6 flex items-center gap-3">
+          > */}
+            {/* <div className="mb-6 flex items-center gap-3">
               <div
                 className="
                   flex h-10 w-10
@@ -267,9 +267,9 @@ function Profile() {
 
                 <p className="text-xs text-slate-500">Manage your account</p>
               </div>
-            </div>
+            </div> */}
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <SettingItem
                 icon={<Bell size={19} />}
                 title="Notifications"
@@ -294,8 +294,8 @@ function Profile() {
                 description="Sign out of your account"
                 danger
               />
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </div>
       </div>
     </div>
@@ -327,49 +327,49 @@ function InfoItem({ icon, title, value }) {
   );
 }
 
-/* Setting Item */
-function SettingItem({ icon, title, description, danger = false }) {
-  return (
-    <button
-      className={`
-        group flex w-full
-        items-center gap-4
-        rounded-2xl
-        p-3
-        text-left
-        transition
-        ${danger ? "hover:bg-red-500/10" : "hover:bg-slate-800/70"}
-      `}
-    >
-      <div
-        className={`
-          flex h-10 w-10 shrink-0
-          items-center justify-center
-          rounded-xl
-          ${
-            danger
-              ? "bg-red-500/10 text-red-400"
-              : "bg-slate-800 text-slate-400 group-hover:text-indigo-400"
-          }
-        `}
-      >
-        {icon}
-      </div>
+// /* Setting Item */
+// function SettingItem({ icon, title, description, danger = false }) {
+//   return (
+//     <button
+//       className={`
+//         group flex w-full
+//         items-center gap-4
+//         rounded-2xl
+//         p-3
+//         text-left
+//         transition
+//         ${danger ? "hover:bg-red-500/10" : "hover:bg-slate-800/70"}
+//       `}
+//     >
+//       <div
+//         className={`
+//           flex h-10 w-10 shrink-0
+//           items-center justify-center
+//           rounded-xl
+//           ${
+//             danger
+//               ? "bg-red-500/10 text-red-400"
+//               : "bg-slate-800 text-slate-400 group-hover:text-indigo-400"
+//           }
+//         `}
+//       >
+//         {icon}
+//       </div>
 
-      <div>
-        <p
-          className={`
-            text-sm font-medium
-            ${danger ? "text-red-400" : "text-slate-200"}
-          `}
-        >
-          {title}
-        </p>
+//       <div>
+//         <p
+//           className={`
+//             text-sm font-medium
+//             ${danger ? "text-red-400" : "text-slate-200"}
+//           `}
+//         >
+//           {title}
+//         </p>
 
-        <p className="mt-1 text-xs text-slate-500">{description}</p>
-      </div>
-    </button>
-  );
-}
+//         <p className="mt-1 text-xs text-slate-500">{description}</p>
+//       </div>
+//     </button>
+//   );
+// }
 
 export default Profile;
