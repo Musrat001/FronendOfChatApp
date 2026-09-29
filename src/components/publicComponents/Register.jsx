@@ -21,7 +21,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:9838/api/v1/auth/signUp", {
+      const response = await fetch("https://backendofchatapp-vpla.onrender.com/api/v1/auth/signUp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ function Register() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        {/* Logo / App Name */}
+       
 
         <div className="text-center mb-8">
           <div
@@ -65,14 +65,14 @@ function Register() {
           </p>
         </div>
 
-        {/* Register Card */}
+      
 
         <div
           className="rounded-2xl border border-gray-200
                      bg-white p-8 shadow-xl"
         >
           <form>
-            {/* Name */}
+       
 
             <div className="mb-5">
               <label
@@ -97,7 +97,7 @@ function Register() {
               />
             </div>
 
-            {/* Email */}
+      
 
             <div className="mb-5">
               <label
@@ -122,7 +122,7 @@ function Register() {
               />
             </div>
 
-            {/* Username */}
+   
 
             <div className="mb-5">
               <label
@@ -147,7 +147,6 @@ function Register() {
               />
             </div>
 
-            {/* Password */}
 
             <div className="mb-6">
               <label
@@ -172,7 +171,7 @@ function Register() {
               />
             </div>
 
-            {/* Register Button */}
+        
 
             <button
               type="submit"
@@ -187,7 +186,7 @@ function Register() {
             </button>
           </form>
 
-          {/* Divider */}
+       
 
           <div className="my-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-gray-200"></div>
@@ -197,7 +196,7 @@ function Register() {
             <div className="h-px flex-1 bg-gray-200"></div>
           </div>
 
-          {/* Login */}
+        
 
           <p className="text-center text-sm text-gray-600">
             Already have an account?
@@ -211,7 +210,7 @@ function Register() {
           </p>
         </div>
 
-        {/* Footer */}
+    
 
         <p className="mt-6 text-center text-xs text-gray-400">
           © 2026 ChatApp. All rights reserved.
