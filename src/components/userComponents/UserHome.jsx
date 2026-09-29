@@ -492,7 +492,7 @@ function UserHome() {
           {/* Actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
 
-            <button
+            {/* <button
               className="
                 w-8 h-8 sm:w-10 sm:h-10
                 rounded-lg
@@ -504,9 +504,9 @@ function UserHome() {
               "
             >
               <Phone size={17} />
-            </button>
+            </button> */}
 
-            <button
+            {/* <button
               className="
                 w-8 h-8 sm:w-10 sm:h-10
                 rounded-lg
@@ -518,7 +518,7 @@ function UserHome() {
               "
             >
               <Video size={18} />
-            </button>
+            </button> */}
 
             <button
               className="
