@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  Edit3,
-  Settings,
-  Shield,
-  Bell,
-  LogOut,
-  Camera,
-  MessageCircle,
-} from "lucide-react";
+import { User, Mail, Phone, Calendar, Edit3, Camera } from "lucide-react";
 
 function Profile() {
   return (
@@ -28,22 +15,6 @@ function Profile() {
               Manage your ChapApp profile
             </p>
           </div>
-          {/* 
-          <button
-            className="
-              flex items-center gap-2 rounded-xl
-              border border-slate-700
-              bg-slate-900 px-4 py-2
-              text-sm text-slate-300
-              transition
-              hover:border-indigo-500
-              hover:bg-indigo-500/10
-              hover:text-indigo-400
-            "
-          >
-            <Settings size={18} />
-            <span className="hidden sm:block">Settings</span>
-          </button> */}
         </div>
 
         {/* Profile Card */}
@@ -141,33 +112,6 @@ function Profile() {
                 Edit Profile
               </button>
             </div>
-
-            {/* Stats
-            <div
-              className="
-                mt-7 grid
-                grid-cols-3
-                divide-x divide-slate-800
-                rounded-2xl
-                border border-slate-800
-                bg-slate-950/50
-              "
-            >
-              <div className="py-4 text-center">
-                <p className="text-xl font-bold">128</p>
-                <p className="mt-1 text-xs text-slate-500">Friends</p>
-              </div>
-
-              <div className="py-4 text-center">
-                <p className="text-xl font-bold">54</p>
-                <p className="mt-1 text-xs text-slate-500">Chats</p>
-              </div>
-
-              <div className="py-4 text-center">
-                <p className="text-xl font-bold">32</p>
-                <p className="mt-1 text-xs text-slate-500">Groups</p>
-              </div>
-            </div>*/}
           </div>
         </div>
 
@@ -225,77 +169,12 @@ function Profile() {
               />
 
               <InfoItem
-                icon={<MapPin size={18} />}
-                title="Location"
-                value="New Delhi, India"
-              />
-
-              <InfoItem
                 icon={<Calendar size={18} />}
                 title="Joined"
                 value="September 2026"
               />
             </div>
           </div>
-
-          {/* Account Settings */}
-          {/* <div
-            className="
-              rounded-3xl
-              border border-slate-800
-              bg-slate-900/70
-              p-5
-              backdrop-blur-xl
-              sm:p-6
-            "
-          > */}
-            {/* <div className="mb-6 flex items-center gap-3">
-              <div
-                className="
-                  flex h-10 w-10
-                  items-center justify-center
-                  rounded-xl
-                  bg-purple-500/10
-                  text-purple-400
-                "
-              >
-                <Settings size={20} />
-              </div>
-
-              <div>
-                <h3 className="font-semibold">Account</h3>
-
-                <p className="text-xs text-slate-500">Manage your account</p>
-              </div>
-            </div> */}
-
-            {/* <div className="space-y-2">
-              <SettingItem
-                icon={<Bell size={19} />}
-                title="Notifications"
-                description="Manage notifications"
-              />
-
-              <SettingItem
-                icon={<Shield size={19} />}
-                title="Privacy & Security"
-                description="Control your privacy"
-              />
-
-              <SettingItem
-                icon={<MessageCircle size={19} />}
-                title="Chat Settings"
-                description="Customize your chats"
-              />
-
-              <SettingItem
-                icon={<LogOut size={19} />}
-                title="Logout"
-                description="Sign out of your account"
-                danger
-              />
-            </div> */}
-          {/* </div> */}
         </div>
       </div>
     </div>
@@ -326,50 +205,5 @@ function InfoItem({ icon, title, value }) {
     </div>
   );
 }
-
-// /* Setting Item */
-// function SettingItem({ icon, title, description, danger = false }) {
-//   return (
-//     <button
-//       className={`
-//         group flex w-full
-//         items-center gap-4
-//         rounded-2xl
-//         p-3
-//         text-left
-//         transition
-//         ${danger ? "hover:bg-red-500/10" : "hover:bg-slate-800/70"}
-//       `}
-//     >
-//       <div
-//         className={`
-//           flex h-10 w-10 shrink-0
-//           items-center justify-center
-//           rounded-xl
-//           ${
-//             danger
-//               ? "bg-red-500/10 text-red-400"
-//               : "bg-slate-800 text-slate-400 group-hover:text-indigo-400"
-//           }
-//         `}
-//       >
-//         {icon}
-//       </div>
-
-//       <div>
-//         <p
-//           className={`
-//             text-sm font-medium
-//             ${danger ? "text-red-400" : "text-slate-200"}
-//           `}
-//         >
-//           {title}
-//         </p>
-
-//         <p className="mt-1 text-xs text-slate-500">{description}</p>
-//       </div>
-//     </button>
-//   );
-// }
 
 export default Profile;

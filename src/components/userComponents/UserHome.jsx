@@ -3,13 +3,10 @@ import {
   Home,
   Bell,
   LogOut,
-  MessageCircle,
   User,
   Search,
   Send,
   MoreVertical,
-  Phone,
-  Video,
   ArrowLeft,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
@@ -21,83 +18,10 @@ function UserHome() {
       time: "2:40 PM",
       unread: 2,
     },
-    {
-      name: "Rahul Sharma",
-      message: "Let's meet tomorrow.",
-      time: "1:25 PM",
-      unread: 0,
-    },
-    {
-      name: "Sarah",
-      message: "Thanks for your help!",
-      time: "12:10 PM",
-      unread: 1,
-    },
-    {
-      name: "Adil",
-      message: "Did you complete the project?",
-      time: "11:45 AM",
-      unread: 0,
-    },
-    {
-      name: "John",
-      message: "See you soon.",
-      time: "10:30 AM",
-      unread: 0,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
-    {
-      name: "Priya",
-      message: "That's awesome!",
-      time: "Yesterday",
-      unread: 3,
-    },
   ];
 
   return (
     <div className="h-screen bg-slate-100 p-2 sm:p-3 flex gap-2 sm:gap-3 overflow-hidden">
-
       {/* ================= SIDEBAR ================= */}
 
       <aside
@@ -111,10 +35,8 @@ function UserHome() {
           shadow-lg
         "
       >
-
         {/* Profile + Navigation */}
         <div className="flex flex-col items-center gap-5 sm:gap-8">
-
           {/* Profile */}
           <button
             className="
@@ -127,15 +49,13 @@ function UserHome() {
               transition
             "
           >
-           <NavLink to={"/profile"}>
-             <User size={18} />
-           </NavLink>
+            <NavLink to={"/profile"}>
+              <User size={18} />
+            </NavLink>
           </button>
-
 
           {/* Navigation */}
           <nav className="flex flex-col gap-2 sm:gap-4">
-
             <button
               className="
                 w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
@@ -159,41 +79,10 @@ function UserHome() {
                 transition
               "
             >
-              <MessageCircle size={19} />
-            </button>
-
-            <button
-              className="
-                w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-                rounded-lg sm:rounded-xl
-                text-slate-400
-                hover:bg-slate-800
-                hover:text-white
-                flex items-center justify-center
-                transition
-              "
-            >
-              <Bell size={19} />
-            </button>
-
-            <button
-              className="
-                w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-                rounded-lg sm:rounded-xl
-                text-slate-400
-                hover:bg-slate-800
-                hover:text-white
-                flex items-center justify-center
-                transition
-              "
-            >
               <Settings size={19} />
             </button>
-
           </nav>
-
         </div>
-
 
         {/* Logout */}
         <button
@@ -209,9 +98,7 @@ function UserHome() {
         >
           <LogOut size={19} />
         </button>
-
       </aside>
-
 
       {/* ================= CHAT LIST ================= */}
 
@@ -229,12 +116,9 @@ function UserHome() {
           overflow-hidden
         "
       >
-
         {/* Header */}
         <div className="p-3 sm:p-5 border-b border-slate-200">
-
           <div className="flex items-center justify-between mb-4 sm:mb-5">
-
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-slate-800">
                 Messages
@@ -244,23 +128,7 @@ function UserHome() {
                 Your conversations
               </p>
             </div>
-
-            <button
-              className="
-                w-8 h-8 sm:w-9 sm:h-9
-                rounded-lg
-                bg-slate-100
-                flex items-center justify-center
-                hover:bg-blue-50
-                hover:text-blue-600
-                transition
-              "
-            >
-              <MoreVertical size={17} />
-            </button>
-
           </div>
-
 
           {/* Search */}
           <div
@@ -273,11 +141,7 @@ function UserHome() {
               focus-within:ring-blue-500
             "
           >
-
-            <Search
-              size={17}
-              className="text-slate-400 shrink-0"
-            />
+            <Search size={17} className="text-slate-400 shrink-0" />
 
             <input
               type="text"
@@ -291,17 +155,12 @@ function UserHome() {
                 placeholder:text-slate-400
               "
             />
-
           </div>
-
         </div>
-
 
         {/* Chat List */}
         <div className="flex-1 min-h-0 overflow-y-auto">
-
           {chats.map((chat, index) => (
-
             <div
               key={index}
               className={`
@@ -313,17 +172,11 @@ function UserHome() {
                 hover:bg-slate-50
                 transition
 
-                ${
-                  index === 0
-                    ? "bg-blue-50 border-l-4 border-l-blue-600"
-                    : ""
-                }
+                ${index === 0 ? "bg-blue-50 border-l-4 border-l-blue-600" : ""}
               `}
             >
-
               {/* Avatar */}
               <div className="relative shrink-0">
-
                 <div
                   className="
                     w-9 h-9
@@ -351,15 +204,11 @@ function UserHome() {
                     "
                   />
                 )}
-
               </div>
-
 
               {/* Information */}
               <div className="flex-1 min-w-0">
-
                 <div className="flex justify-between items-center gap-2">
-
                   <h3 className="font-semibold text-xs sm:text-sm text-slate-800 truncate">
                     {chat.name}
                   </h3>
@@ -367,11 +216,9 @@ function UserHome() {
                   <span className="text-[9px] sm:text-[11px] text-slate-400 shrink-0">
                     {chat.time}
                   </span>
-
                 </div>
 
                 <div className="flex items-center justify-between">
-
                   <p className="text-[10px] sm:text-xs text-slate-400 truncate mt-1">
                     {chat.message}
                   </p>
@@ -392,19 +239,12 @@ function UserHome() {
                       {chat.unread}
                     </span>
                   )}
-
                 </div>
-
               </div>
-
             </div>
-
           ))}
-
         </div>
-
       </section>
-
 
       {/* ================= CHAT WINDOW ================= */}
 
@@ -419,7 +259,6 @@ function UserHome() {
           overflow-hidden
         "
       >
-
         {/* Header */}
         <header
           className="
@@ -429,9 +268,7 @@ function UserHome() {
             flex items-center justify-between
           "
         >
-
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-
             {/* Back button - useful on small screens */}
             <button
               className="
@@ -446,7 +283,6 @@ function UserHome() {
             </button>
 
             <div className="relative shrink-0">
-
               <div
                 className="
                   w-9 h-9
@@ -470,56 +306,19 @@ function UserHome() {
                   rounded-full
                 "
               />
-
             </div>
 
-
             <div className="min-w-0">
-
               <h2 className="font-semibold text-sm sm:text-base text-slate-800 truncate">
                 Aman Khan
               </h2>
 
-              <p className="text-[10px] sm:text-xs text-green-500">
-                Online
-              </p>
-
+              <p className="text-[10px] sm:text-xs text-green-500">Online</p>
             </div>
-
           </div>
-
 
           {/* Actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
-
-            {/* <button
-              className="
-                w-8 h-8 sm:w-10 sm:h-10
-                rounded-lg
-                hover:bg-slate-100
-                text-slate-500
-                hover:text-blue-600
-                flex items-center justify-center
-                transition
-              "
-            >
-              <Phone size={17} />
-            </button> */}
-
-            {/* <button
-              className="
-                w-8 h-8 sm:w-10 sm:h-10
-                rounded-lg
-                hover:bg-slate-100
-                text-slate-500
-                hover:text-blue-600
-                flex items-center justify-center
-                transition
-              "
-            >
-              <Video size={18} />
-            </button> */}
-
             <button
               className="
                 w-8 h-8 sm:w-10 sm:h-10
@@ -532,11 +331,8 @@ function UserHome() {
             >
               <MoreVertical size={18} />
             </button>
-
           </div>
-
         </header>
-
 
         {/* ================= MESSAGES ================= */}
 
@@ -548,125 +344,7 @@ function UserHome() {
             p-3 sm:p-5 lg:p-6
             bg-slate-50
           "
-        >
-
-          {/* Received */}
-          <div className="flex mb-3 sm:mb-4">
-
-            <div
-              className="
-                max-w-[75%]
-                sm:max-w-md
-                bg-white
-                border border-slate-200
-                px-3 sm:px-4
-                py-2.5 sm:py-3
-                rounded-2xl rounded-tl-sm
-                shadow-sm
-              "
-            >
-
-              <p className="text-xs sm:text-sm text-slate-700">
-                Hey! How are you doing?
-              </p>
-
-              <span className="text-[9px] sm:text-[10px] text-slate-400 block mt-1">
-                02:35 PM
-              </span>
-
-            </div>
-
-          </div>
-
-
-          {/* Sent */}
-          <div className="flex justify-end mb-3 sm:mb-4">
-
-            <div
-              className="
-                max-w-[75%]
-                sm:max-w-md
-                bg-blue-600
-                text-white
-                px-3 sm:px-4
-                py-2.5 sm:py-3
-                rounded-2xl rounded-tr-sm
-                shadow-sm
-              "
-            >
-
-              <p className="text-xs sm:text-sm">
-                I'm doing great! What about you?
-              </p>
-
-              <span className="text-[9px] sm:text-[10px] text-blue-100 block mt-1 text-right">
-                02:36 PM
-              </span>
-
-            </div>
-
-          </div>
-
-
-          {/* Received */}
-          <div className="flex mb-3 sm:mb-4">
-
-            <div
-              className="
-                max-w-[75%]
-                sm:max-w-md
-                bg-white
-                border border-slate-200
-                px-3 sm:px-4
-                py-2.5 sm:py-3
-                rounded-2xl rounded-tl-sm
-                shadow-sm
-              "
-            >
-
-              <p className="text-xs sm:text-sm text-slate-700">
-                I'm good too. Are you working on the ChatApp?
-              </p>
-
-              <span className="text-[9px] sm:text-[10px] text-slate-400 block mt-1">
-                02:39 PM
-              </span>
-
-            </div>
-
-          </div>
-
-
-          {/* Sent */}
-          <div className="flex justify-end mb-3 sm:mb-4">
-
-            <div
-              className="
-                max-w-[75%]
-                sm:max-w-md
-                bg-blue-600
-                text-white
-                px-3 sm:px-4
-                py-2.5 sm:py-3
-                rounded-2xl rounded-tr-sm
-                shadow-sm
-              "
-            >
-
-              <p className="text-xs sm:text-sm">
-                Yes! I'm building the UI right now.
-              </p>
-
-              <span className="text-[9px] sm:text-[10px] text-blue-100 block mt-1 text-right">
-                02:40 PM
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
+        ></div>
 
         {/* ================= MESSAGE INPUT ================= */}
 
@@ -677,9 +355,7 @@ function UserHome() {
             bg-white
           "
         >
-
           <div className="flex items-center gap-2 sm:gap-3">
-
             <input
               type="text"
               placeholder="Write a message..."
@@ -713,13 +389,9 @@ function UserHome() {
             >
               <Send size={18} />
             </button>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }

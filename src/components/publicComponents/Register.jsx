@@ -3,7 +3,7 @@ import { data, Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
-
+  const url = "https://backendofchatapp-vpla.onrender.com";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -21,7 +21,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch("https://backendofchatapp-vpla.onrender.com/api/v1/auth/signUp", {
+      const response = await fetch("http://localhost/9838/api/v1/auth/signUp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,10 +31,10 @@ function Register() {
       });
       const data = await response.json();
       console.log(data);
-        
+
       if (data.success == true) {
-        alert(data.message)
-        
+        alert(data.message);
+
         navigate("/login");
       }
     } catch (error) {
@@ -47,8 +47,6 @@ function Register() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-       
-
         <div className="text-center mb-8">
           <div
             className="mx-auto mb-4 flex h-14 w-14 items-center
@@ -65,15 +63,11 @@ function Register() {
           </p>
         </div>
 
-      
-
         <div
           className="rounded-2xl border border-gray-200
                      bg-white p-8 shadow-xl"
         >
           <form>
-       
-
             <div className="mb-5">
               <label
                 htmlFor="name"
@@ -96,8 +90,6 @@ function Register() {
                 required
               />
             </div>
-
-      
 
             <div className="mb-5">
               <label
@@ -122,8 +114,6 @@ function Register() {
               />
             </div>
 
-   
-
             <div className="mb-5">
               <label
                 htmlFor="username"
@@ -146,7 +136,6 @@ function Register() {
                 required
               />
             </div>
-
 
             <div className="mb-6">
               <label
@@ -171,8 +160,6 @@ function Register() {
               />
             </div>
 
-        
-
             <button
               type="submit"
               className="w-full rounded-lg bg-blue-600
@@ -186,8 +173,6 @@ function Register() {
             </button>
           </form>
 
-       
-
           <div className="my-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-gray-200"></div>
 
@@ -195,8 +180,6 @@ function Register() {
 
             <div className="h-px flex-1 bg-gray-200"></div>
           </div>
-
-        
 
           <p className="text-center text-sm text-gray-600">
             Already have an account?
@@ -209,8 +192,6 @@ function Register() {
             </Link>
           </p>
         </div>
-
-    
 
         <p className="mt-6 text-center text-xs text-gray-400">
           © 2026 ChatApp. All rights reserved.
