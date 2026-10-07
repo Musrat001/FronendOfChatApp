@@ -1,7 +1,6 @@
 import {
   Settings,
   Home,
-  Bell,
   LogOut,
   User,
   Search,
@@ -9,20 +8,162 @@ import {
   MoreVertical,
   ArrowLeft,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 function UserHome() {
-  const chats = [
-    {
-      name: "Aman Khan",
-      message: "Hey, are you available?",
-      time: "2:40 PM",
-      unread: 2,
-    },
-  ];
+  const navigate = useNavigate();
+  const [chats, setChats] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [conversations, setConversations] = useState(null);
+  const [text, setText] = useState("");
+
+  // get user
+  const getCurrentUser = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:9838/api/v1/message/users",
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("API Response:", data);
+
+      // API response:
+      // {
+      //   success: true,
+      //   users: [...]
+      // }
+
+      if (data.success && Array.isArray(data.users)) {
+        setChats(data.users);
+      } else {
+        setChats([]);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setChats([]);
+    }
+  };
+
+  // get selected user conversation
+  const getConversationOfSelectedUser = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:9838/api/v1/message/receivedMessage/${selectedUser._id}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("API Response:", data);
+
+      setConversations(data.messages);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setConversations(null);
+    }
+  };
+
+  // setting message
+
+  const handleSetMessage = (e) => {
+    setText(e.target.value);
+  };
+
+  // sending message
+
+  const sendMessage = async (e) => {
+    console.log("text: ", text);
+    console.log("receiverId", selectedUser._id);
+
+    const messageObj = {
+      text: text,
+      receiverId: selectedUser._id,
+    };
+
+    try {
+      const responce = await fetch(
+        `http://localhost:9838/api/v1/message/send`,
+        {
+          method: "POST",
+          headers: {
+            "content-Type": "application/json",
+          },
+          body: JSON.stringify(messageObj),
+          credentials: "include",
+        },
+      );
+      setText("");
+    } catch (error) {
+      console.log("Error wile sending message", error);
+      setText(null);
+    }
+  };
+
+  const logOut = async () => {
+    try {
+      const response = await fetch(`http://localhost:9838/api/v1/auth/logout`, {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("API Response:", data);
+      alert(data.message)
+
+      navigate("/login");
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  // for getting users
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
+  //  for getting seledted user Conversation
+
+  useEffect(() => {
+    if (!selectedUser?._id) return;
+
+    getConversationOfSelectedUser();
+  }, [selectedUser]);
+
+  // sending message
+
+  useEffect(() => {
+    if (!text) return;
+    sendMessage();
+  }, []);
+
+  console.log("Selected User:", selectedUser);
+  console.log("Chats", conversations);
 
   return (
     <div className="h-screen bg-slate-100 p-2 sm:p-3 flex gap-2 sm:gap-3 overflow-hidden">
-      {/* ================= SIDEBAR ================= */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <aside
         className="
@@ -38,7 +179,8 @@ function UserHome() {
         {/* Profile + Navigation */}
         <div className="flex flex-col items-center gap-5 sm:gap-8">
           {/* Profile */}
-          <button
+          <NavLink
+            to="/profile"
             className="
               w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
               rounded-full
@@ -49,14 +191,13 @@ function UserHome() {
               transition
             "
           >
-            <NavLink to={"/profile"}>
-              <User size={18} />
-            </NavLink>
-          </button>
+            <User size={18} />
+          </NavLink>
 
           {/* Navigation */}
           <nav className="flex flex-col gap-2 sm:gap-4">
-            <button
+            <NavLink
+              to="/"
               className="
                 w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
                 rounded-lg sm:rounded-xl
@@ -66,9 +207,10 @@ function UserHome() {
               "
             >
               <Home size={19} />
-            </button>
+            </NavLink>
 
             <button
+              type="button"
               className="
                 w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
                 rounded-lg sm:rounded-xl
@@ -86,6 +228,7 @@ function UserHome() {
 
         {/* Logout */}
         <button
+          type="button"
           className="
             w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
             rounded-lg sm:rounded-xl
@@ -95,12 +238,15 @@ function UserHome() {
             flex items-center justify-center
             transition
           "
+          onClick={logOut}
         >
           <LogOut size={19} />
         </button>
       </aside>
 
-      {/* ================= CHAT LIST ================= */}
+      {/* =====================================================
+          CHAT LIST
+      ===================================================== */}
 
       <section
         className="
@@ -158,95 +304,128 @@ function UserHome() {
           </div>
         </div>
 
-        {/* Chat List */}
+        {/* =================================================
+            USERS / CHAT LIST
+        ================================================= */}
+
         <div className="flex-1 min-h-0 overflow-y-auto">
-          {chats.map((chat, index) => (
-            <div
-              key={index}
-              className={`
-                flex items-center gap-2 sm:gap-3
-                px-3 sm:px-4
-                py-3 sm:py-4
-                cursor-pointer
-                border-b border-slate-100
-                hover:bg-slate-50
-                transition
+          {chats.length === 0 ? (
+            <div className="h-full flex items-center justify-center p-5">
+              <p className="text-sm text-slate-400 text-center">
+                No users found
+              </p>
+            </div>
+          ) : (
+            chats.map((chat, index) => {
+              // Safely get user information
+              const name = chat?.name || "Unknown User";
 
-                ${index === 0 ? "bg-blue-50 border-l-4 border-l-blue-600" : ""}
-              `}
-            >
-              {/* Avatar */}
-              <div className="relative shrink-0">
+              const username = chat?.username || chat?.email || "No username";
+
+              const avatarLetter = name.charAt(0).toUpperCase();
+
+              return (
                 <div
-                  className="
-                    w-9 h-9
-                    sm:w-11 sm:h-11
-                    rounded-full
-                    bg-blue-100
-                    text-blue-600
-                    flex items-center justify-center
-                    font-semibold
-                    text-sm
-                  "
+                  key={chat?._id || index}
+                  className={`
+                    flex items-center gap-2 sm:gap-3
+                    px-3 sm:px-4
+                    py-3 sm:py-4
+                    cursor-pointer
+                    border-b border-slate-100
+                    hover:bg-slate-50
+                    transition
+
+                    ${
+                      index === 0
+                        ? "bg-blue-50 border-l-4 border-l-blue-600"
+                        : ""
+                    }
+                  `}
+                  onClick={() => setSelectedUser(chat)}
                 >
-                  {chat.name.charAt(0)}
-                </div>
-
-                {index < 3 && (
-                  <span
-                    className="
-                      absolute bottom-0 right-0
-                      w-2.5 h-2.5
-                      sm:w-3 sm:h-3
-                      bg-green-500
-                      border-2 border-white
-                      rounded-full
-                    "
-                  />
-                )}
-              </div>
-
-              {/* Information */}
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center gap-2">
-                  <h3 className="font-semibold text-xs sm:text-sm text-slate-800 truncate">
-                    {chat.name}
-                  </h3>
-
-                  <span className="text-[9px] sm:text-[11px] text-slate-400 shrink-0">
-                    {chat.time}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <p className="text-[10px] sm:text-xs text-slate-400 truncate mt-1">
-                    {chat.message}
-                  </p>
-
-                  {chat.unread > 0 && (
-                    <span
+                  {/* Avatar */}
+                  <div className="relative shrink-0">
+                    <div
                       className="
-                        ml-1
-                        min-w-4 h-4 sm:min-w-5 sm:h-5
-                        px-1
+                        w-9 h-9
+                        sm:w-11 sm:h-11
                         rounded-full
-                        bg-blue-600
-                        text-white
-                        text-[9px]
+                        bg-blue-100
+                        text-blue-600
                         flex items-center justify-center
+                        font-semibold
+                        text-sm
                       "
                     >
-                      {chat.unread}
-                    </span>
-                  )}
+                      {avatarLetter}
+                    </div>
+
+                    {/* Online indicator */}
+                    {index < 3 && (
+                      <span
+                        className="
+                          absolute bottom-0 right-0
+                          w-2.5 h-2.5
+                          sm:w-3 sm:h-3
+                          bg-green-500
+                          border-2 border-white
+                          rounded-full
+                        "
+                      />
+                    )}
+                  </div>
+
+                  {/* User Information */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-center gap-2">
+                      <h3
+                        className="
+                          font-semibold
+                          text-xs sm:text-sm
+                          text-slate-800
+                          truncate
+                        "
+                      >
+                        {name}
+                      </h3>
+
+                      <span
+                        className="
+                          text-[9px]
+                          sm:text-[11px]
+                          text-slate-400
+                          shrink-0
+                        "
+                      >
+                        {index < 3 ? "Online" : ""}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p
+                        className="
+                          text-[10px]
+                          sm:text-xs
+                          text-slate-400
+                          truncate
+                          mt-1
+                        "
+                      >
+                        {username}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })
+          )}
         </div>
       </section>
 
-      {/* ================= CHAT WINDOW ================= */}
+      {/* =====================================================
+          CHAT WINDOW
+      ===================================================== */}
 
       <main
         className="
@@ -269,19 +448,9 @@ function UserHome() {
           "
         >
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            {/* Back button - useful on small screens */}
-            <button
-              className="
-                lg:hidden
-                w-8 h-8
-                rounded-lg
-                hover:bg-slate-100
-                flex items-center justify-center
-              "
-            >
-              <ArrowLeft size={18} />
-            </button>
+            {/* Back button */}
 
+            {/* Avatar */}
             <div className="relative shrink-0">
               <div
                 className="
@@ -297,29 +466,41 @@ function UserHome() {
                 A
               </div>
 
-              <span
+              {/* <span
                 className="
                   absolute bottom-0 right-0
-                  w-2.5 h-2.5 sm:w-3 sm:h-3
+                  w-2.5 h-2.5
+                  sm:w-3 sm:h-3
                   bg-green-500
                   border-2 border-white
                   rounded-full
                 "
-              />
+              /> */}
             </div>
 
+            {/* User */}
             <div className="min-w-0">
-              <h2 className="font-semibold text-sm sm:text-base text-slate-800 truncate">
-                Aman Khan
-              </h2>
-
-              <p className="text-[10px] sm:text-xs text-green-500">Online</p>
+              {selectedUser ? (
+                <h2
+                  className="
+                  font-semibold
+                  text-sm sm:text-base
+                  text-slate-800
+                  truncate
+                "
+                >
+                  {selectedUser.name}
+                </h2>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
             <button
+              type="button"
               className="
                 w-8 h-8 sm:w-10 sm:h-10
                 rounded-lg
@@ -334,7 +515,9 @@ function UserHome() {
           </div>
         </header>
 
-        {/* ================= MESSAGES ================= */}
+        {/* =================================================
+            MESSAGES
+        ================================================= */}
 
         <div
           className="
@@ -344,9 +527,13 @@ function UserHome() {
             p-3 sm:p-5 lg:p-6
             bg-slate-50
           "
-        ></div>
+        >
+          {conversations ? conversations.map((e) => <p> {e}</p>) : ""}
+        </div>
 
-        {/* ================= MESSAGE INPUT ================= */}
+        {/* =================================================
+            MESSAGE INPUT
+        ================================================= */}
 
         <div
           className="
@@ -371,9 +558,12 @@ function UserHome() {
                 focus:ring-2
                 focus:ring-blue-500
               "
+              value={text}
+              onChange={handleSetMessage}
             />
 
             <button
+              type="button"
               className="
                 w-10 h-10
                 sm:w-12 sm:h-12
@@ -386,6 +576,7 @@ function UserHome() {
                 transition
                 shadow-sm
               "
+              onClick={sendMessage}
             >
               <Send size={18} />
             </button>
