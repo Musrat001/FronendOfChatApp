@@ -58,6 +58,8 @@ function UserHome() {
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
 
       const data = await response.json();
+      console.log("API res of getChat: ", data);
+      
       setMessages(Array.isArray(data.messages) ? data.messages : []);
     } catch (error) {
       console.error("Error fetching conversation:", error);
