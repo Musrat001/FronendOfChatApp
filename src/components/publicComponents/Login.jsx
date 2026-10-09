@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const url = "https://backendofchatapp-vpla.onrender.com";
   const navigate = useNavigate();
+  // const localUrl = "http://localhost:9838/api/v1/auth/signIn"
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +19,7 @@ function Login() {
     };
 
     try {
-      const response = await fetch("http://localhost:9838/api/v1/auth/signIn", {
+      const response = await fetch(`${url}/api/v1/auth/signIn`, {
         method: "POST",
         headers: {
           "content-Type": "application/json",
