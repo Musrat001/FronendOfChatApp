@@ -51,7 +51,8 @@ function UserHome() {
 
     try {
       const response = await fetch(
-        `${url}/v1/message/receivedMessage/${selectedUser._id}`,
+        `${url}//api/v1/message/receivedMessage/${selectedUser._id}`
+        ,
         { credentials: "include" },
       );
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
@@ -183,6 +184,11 @@ function UserHome() {
       </button>
     </>
   );
+
+  console.log("Selected User", selectedUser);
+  console.log("messages", messages);
+  
+  
 
   return (
     <div className="h-[100dvh] min-h-0 overflow-hidden bg-slate-100 p-0 sm:p-3 flex gap-3">
