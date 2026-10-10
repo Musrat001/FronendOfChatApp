@@ -6,6 +6,8 @@ import {
   Search,
   Send,
   MoreVertical,
+  Menu,
+  ArrowLeft,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -18,6 +20,18 @@ function UserHome() {
   // const [conversations, setConversations] = useState(null);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState();
+
+  // Added only for responsive mobile navigation.
+  const [mobileChatView, setMobileChatView] = useState("list");
+
+  const openMobileChat = (chat) => {
+    setSelectedUser(chat);
+    setMobileChatView("chat");
+  };
+
+  const showMobileUserList = () => {
+    setMobileChatView("list");
+  };
 
   // get user
   const getCurrentUser = async () => {
@@ -75,7 +89,7 @@ function UserHome() {
       setMessages(data.messages);
     } catch (error) {
       console.error("Error fetching users:", error);
-      setConversations(null);
+      setConversations("");
     }
   };
 
@@ -160,14 +174,28 @@ function UserHome() {
   console.log("Messages:", messages);
 
   return (
-    <div className="h-screen bg-slate-100 p-2 sm:p-3 flex gap-2 sm:gap-3 overflow-hidden">
+    <div
+      className={`relative h-[100dvh] min-h-0 bg-slate-100 p-0 flex gap-0 overflow-hidden
+        sm:h-screen sm:p-2 sm:gap-2 md:gap-3
+        ${mobileChatView === "chat" ? "mobile-chat-active" : "mobile-list-active"}`}
+    >
+      {/* Added responsive hamburger control for phones. */}
+      <button
+        type="button"
+        aria-label="Open conversations list"
+        className="fixed left-3 top-3 z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg sm:hidden"
+        onClick={showMobileUserList}
+      >
+        <Menu size={22} />
+      </button>
+
       {/* =====================================================
           SIDEBAR
       ===================================================== */}
 
       <aside
         className="
-          w-14 sm:w-16 lg:w-20
+          hidden sm:flex w-14 sm:w-16 lg:w-20
           shrink-0
           bg-slate-900
           rounded-xl sm:rounded-2xl
@@ -249,21 +277,14 @@ function UserHome() {
       ===================================================== */}
 
       <section
-        className="
-          w-60
-          sm:w-72
-          md:w-80
-          lg:w-80
-          shrink-0
-          bg-white
-          rounded-xl sm:rounded-2xl
-          shadow-sm
-          flex flex-col
-          overflow-hidden
-        "
+        className={`w-full sm:w-72
+          ${mobileChatView === "chat" ? "hidden sm:flex" : "flex"}
+          absolute inset-0 z-30 rounded-none
+          sm:static sm:inset-auto sm:z-auto sm:rounded-xl lg:rounded-2xl
+          md:w-80 lg:w-80 shrink-0 bg-white shadow-sm flex flex-col overflow-hidden`}
       >
         {/* Header */}
-        <div className="p-3 sm:p-5 border-b border-slate-200">
+        <div className="p-3 pt-14 sm:p-5 border-b border-slate-200">
           <div className="flex items-center justify-between mb-4 sm:mb-5">
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-slate-800">
@@ -342,7 +363,7 @@ function UserHome() {
                         : ""
                     }
                   `}
-                  onClick={() => setSelectedUser(chat)}
+                  onClick={() => openMobileChat(chat)}
                 >
                   {/* Avatar */}
                   <div className="relative shrink-0">
@@ -429,15 +450,9 @@ function UserHome() {
 
       {selectedUser ? (
         <main
-          className="
-          flex-1
-          min-w-0
-          bg-white
-          rounded-xl sm:rounded-2xl
-          shadow-sm
-          flex flex-col
-          overflow-hidden
-        "
+          className={`${
+            mobileChatView === "chat" ? "flex" : "hidden sm:flex"
+          } absolute inset-0 z-20 w-full h-full sm:static sm:inset-auto sm:z-auto sm:flex-1 sm:w-auto sm:h-auto min-w-0 rounded-none sm:rounded-xl lg:rounded-2xl bg-white shadow-sm flex flex-col overflow-hidden`}
         >
           {/* Header */}
           <header
@@ -449,6 +464,15 @@ function UserHome() {
           "
           >
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              {/* Added mobile back button; desktop layout remains unchanged. */}
+              <button
+                type="button"
+                aria-label="Back to conversations"
+                className="mr-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 sm:hidden"
+                onClick={showMobileUserList}
+              >
+                <ArrowLeft size={21} />
+              </button>
               {/* Avatar */}
               <div className="relative shrink-0">
                 {selectedUser ? (
@@ -538,8 +562,15 @@ function UserHome() {
                     className="flex items-baseline justify-center flex-col "
                     key={e._id}
                   >
-                    <span className="py-1 px-2 bg-amber-200 rounded mt-2">
+                    <span className="py-1 px-2 bg-amber-100 rounded mt-4 max-w-80 shadow-md">
                       {e.text}
+                      <p className="text-xs text-end text-blue-500">
+                        {new Date(e.createdAt).toLocaleTimeString("en-IN", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </p>
                     </span>
                   </div>
                 ) : (
@@ -565,8 +596,15 @@ function UserHome() {
               ? messages.map((e) =>
                   e.senderId != selectedUser._id ? (
                     <div className="flex items-end justify-center flex-col ">
-                      <span className="py-1 px-2 bg-green-500 rounded mt-2 ">
+                      <span className="py-1 px-2 bg-gray-200 rounded mt-4 max-w-80 shadow-md">
                         {e.text}
+                        <p className="text-xs text-end text-blue-500">
+                          {new Date(e.createdAt).toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
+                        </p>
                       </span>
                     </div>
                   ) : (
@@ -642,7 +680,7 @@ function UserHome() {
           justify-center
         "
         >
-          <p className=" py-3 px-4 bg-pink-400 rounded">
+          <p className=" py-3 px-4 bg-gray-200 rounded shadow-lg">
             {" "}
             Selecte Any user To Communicate
           </p>
