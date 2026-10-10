@@ -19,7 +19,7 @@ function UserHome() {
   const [selectedUser, setSelectedUser] = useState(null);
   // const [conversations, setConversations] = useState(null);
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState();
+  const [messages, setMessages] = useState([]);
 
   // Added only for responsive mobile navigation.
   const [mobileChatView, setMobileChatView] = useState("list");
@@ -81,15 +81,18 @@ function UserHome() {
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
       }
+      // console.log("Response before json conversion", response);
 
       const data = await response.json();
+      if (!data.success) {
+        return;
+      }
 
       console.log("API Response:", data);
-
       setMessages(data.messages);
     } catch (error) {
       console.error("Error fetching users:", error);
-      setConversations("");
+      setMessage([]);
     }
   };
 
@@ -159,6 +162,8 @@ function UserHome() {
 
   useEffect(() => {
     if (!selectedUser?._id) return;
+
+    setMessages([]);
 
     getConversationOfSelectedUser();
   }, [selectedUser]);
@@ -555,7 +560,7 @@ function UserHome() {
             bg-slate-50
           "
           >
-            {messages ? (
+            {messages.length > 0 ? (
               messages.map((e) =>
                 e.senderId == selectedUser._id ? (
                   <div
@@ -595,7 +600,10 @@ function UserHome() {
             {messages
               ? messages.map((e) =>
                   e.senderId != selectedUser._id ? (
-                    <div className="flex items-end justify-center flex-col ">
+                    <div
+                      className="flex items-end justify-center flex-col "
+                      key={e._id}
+                    >
                       <span className="py-1 px-2 bg-gray-200 rounded mt-4 max-w-80 shadow-md">
                         {e.text}
                         <p className="text-xs text-end text-blue-500">
@@ -643,6 +651,11 @@ function UserHome() {
               "
                 value={text}
                 onChange={handleSetMessage}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
               />
 
               <button
