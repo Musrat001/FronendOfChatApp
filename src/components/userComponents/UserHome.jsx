@@ -12,9 +12,16 @@ import {
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+// import { io } from "socket.io-client";
+import { useAuth } from "../../../contex/AuthContext";
+import { socket } from "../../../socket/socket.js";
+
+// console.log(loggedInUser);
 
 function UserHome() {
   const navigate = useNavigate();
+  const { loggedInUser } = useAuth();
+  console.log("Logged In user", loggedInUser);
   const [chats, setChats] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   // const [conversations, setConversations] = useState(null);
@@ -23,6 +30,24 @@ function UserHome() {
 
   // Added only for responsive mobile navigation.
   const [mobileChatView, setMobileChatView] = useState("list");
+
+  
+  //   socket.connect();
+
+  //   socket.on("connect", () => {
+  //     console.log("Socket connected:", socket.id);
+  //   });
+
+  //   socket.on("disconnect", () => {
+  //     console.log("Socket disconnected");
+  //   });
+
+  //   return () => {
+  //     socket.off("connect");
+  //     socket.off("disconnect");
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   const openMobileChat = (chat) => {
     setSelectedUser(chat);
@@ -92,7 +117,7 @@ function UserHome() {
       setMessages(data.messages);
     } catch (error) {
       console.error("Error fetching users:", error);
-      setMessage([]);
+      setMessages([]);
     }
   };
 
@@ -125,7 +150,16 @@ function UserHome() {
           credentials: "include",
         },
       );
-      setText("");
+      if (!responce.ok) {
+        throw new Error(`HTTP Error: ${responce.status}`);
+      }
+
+      const data = await responce.json();
+
+      if (data.success) {
+        setMessages((prev) => [...prev, data.text]);
+        setText("");
+      }
     } catch (error) {
       console.log("Error wile sending message", error);
       setText(null);
@@ -153,6 +187,62 @@ function UserHome() {
     }
   };
 
+  useEffect(() => {
+    if (!loggedInUser?._id) {
+      console.log("Waiting for logged-in user...");
+      return;
+    }
+
+    socket.io.opts.query = {
+      userId: loggedInUser._id.toString(),
+    };
+
+    const onConnect = () => {
+      console.log("Socket connected:", socket.id);
+      console.log("Connected user:", loggedInUser._id);
+    };
+
+    const onDisconnect = (reason) => {
+      console.log("Socket disconnected:", reason);
+    };
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    socket.connect();
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.disconnect();
+    };
+  }, [loggedInUser?._id]);
+
+  // for sending message
+  useEffect(() => {
+    const handleNewMessage = (message) => {
+      console.log("REAL-TIME EVENT RECEIVED:", message);
+
+      setMessages((prevMessages) => {
+        const alreadyExists = prevMessages.some(
+          (item) => item._id === message._id,
+        );
+
+        if (alreadyExists) {
+          return prevMessages;
+        }
+
+        return [...prevMessages, message];
+      });
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
+
   // for getting users
   useEffect(() => {
     getCurrentUser();
@@ -167,13 +257,6 @@ function UserHome() {
 
     getConversationOfSelectedUser();
   }, [selectedUser]);
-
-  // sending message
-
-  useEffect(() => {
-    if (!text) return;
-    sendMessage();
-  }, []);
 
   console.log("Selected User:", selectedUser);
   console.log("Messages:", messages);
