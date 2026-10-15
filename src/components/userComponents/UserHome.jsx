@@ -21,18 +21,20 @@ import { socket } from "../../../socket/socket.js";
 function UserHome() {
   const navigate = useNavigate();
   const { loggedInUser } = useAuth();
-  console.log("Logged In user", loggedInUser);
+
+  // use to save chats
   const [chats, setChats] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   // const [conversations, setConversations] = useState(null);
+
+  // store the text currenlty the user sending
   const [text, setText] = useState("");
+
+  // store message array
   const [messages, setMessages] = useState([]);
 
   // Added only for responsive mobile navigation.
   const [mobileChatView, setMobileChatView] = useState("list");
-
-  
-  //   socket.connect();
 
   //   socket.on("connect", () => {
   //     console.log("Socket connected:", socket.id);
@@ -58,7 +60,8 @@ function UserHome() {
     setMobileChatView("list");
   };
 
-  // get user
+  // get users just After logged In
+
   const getCurrentUser = async () => {
     try {
       const response = await fetch(
@@ -93,7 +96,8 @@ function UserHome() {
     }
   };
 
-  // get selected user conversation
+  // getting the conversation between the logged in user and selected user
+
   const getConversationOfSelectedUser = async () => {
     try {
       const response = await fetch(
@@ -122,16 +126,14 @@ function UserHome() {
   };
 
   // setting message
-
   const handleSetMessage = (e) => {
     setText(e.target.value);
   };
 
-  // sending message
-
+  // sending current messages (text) to selected user.
   const sendMessage = async (e) => {
-    console.log("text: ", text);
-    console.log("receiverId", selectedUser._id);
+    // console.log("text: ", text);
+    // console.log("receiverId", selectedUser._id);
 
     const messageObj = {
       text: text,
@@ -187,12 +189,16 @@ function UserHome() {
     }
   };
 
+  // useEffect that runs just after logges user found
+  // and assigned the User to a socket id
   useEffect(() => {
     if (!loggedInUser?._id) {
       console.log("Waiting for logged-in user...");
       return;
     }
 
+    // sending the logged in user _id to backend
+    // so that socket can connect through it
     socket.io.opts.query = {
       userId: loggedInUser._id.toString(),
     };
@@ -211,6 +217,7 @@ function UserHome() {
 
     socket.connect();
 
+    // crean up function
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -218,7 +225,7 @@ function UserHome() {
     };
   }, [loggedInUser?._id]);
 
-  // for sending message
+  // useEffect runs and fetched the current send message and shows it to chat window.
   useEffect(() => {
     const handleNewMessage = (message) => {
       console.log("REAL-TIME EVENT RECEIVED:", message);
@@ -248,8 +255,7 @@ function UserHome() {
     getCurrentUser();
   }, []);
 
-  //  for getting seledted user Conversation
-
+  // getting the conversation between the logged in user and selected user
   useEffect(() => {
     if (!selectedUser?._id) return;
 
@@ -263,7 +269,7 @@ function UserHome() {
 
   return (
     <div
-      className={`relative h-[100dvh] min-h-0 bg-slate-100 p-0 flex gap-0 overflow-hidden
+      className={`relative h-dvh min-h-0 bg-slate-100 p-0 flex gap-0 overflow-hidden
         sm:h-screen sm:p-2 sm:gap-2 md:gap-3
         ${mobileChatView === "chat" ? "mobile-chat-active" : "mobile-list-active"}`}
     >
@@ -283,7 +289,7 @@ function UserHome() {
 
       <aside
         className="
-          hidden sm:flex w-14 sm:w-16 lg:w-20
+          sm:flex w-14 sm:w-16 lg:w-20
           shrink-0
           bg-slate-900
           rounded-xl sm:rounded-2xl
@@ -644,65 +650,48 @@ function UserHome() {
           "
           >
             {messages.length > 0 ? (
-              messages.map((e) =>
-                e.senderId == selectedUser._id ? (
-                  <div
-                    className="flex items-baseline justify-center flex-col "
-                    key={e._id}
-                  >
-                    <span className="py-1 px-2 bg-amber-100 rounded mt-4 max-w-80 shadow-md">
-                      {e.text}
-                      <p className="text-xs text-end text-blue-500">
-                        {new Date(e.createdAt).toLocaleTimeString("en-IN", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </p>
-                    </span>
-                  </div>
-                ) : (
-                  ""
-                ),
-              )
-            ) : (
-              <div
-                className="
-              flex-1
-              
-              flex flex-col
-              overflow-hidden
-              
-              justify-center
-              items-center
-              "
-              >
-                <p>No conversation yet</p>
-              </div>
-            )}
-            {messages
-              ? messages.map((e) =>
-                  e.senderId != selectedUser._id ? (
+              [...messages]
+                .sort(
+                  (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime(),
+                )
+                .map((message) => {
+                  const isReceived = message.senderId == selectedUser._id;
+
+                  return (
                     <div
-                      className="flex items-end justify-center flex-col "
-                      key={e._id}
+                      key={message._id}
+                      className={`flex ${
+                        isReceived ? "justify-start" : "justify-end"
+                      }`}
                     >
-                      <span className="py-1 px-2 bg-gray-200 rounded mt-4 max-w-80 shadow-md">
-                        {e.text}
+                      <span
+                        className={`py-1 px-2 rounded mt-4 max-w-80 shadow-md ${
+                          isReceived ? "bg-amber-100" : "bg-gray-200"
+                        }`}
+                      >
+                        {message.text}
+
                         <p className="text-xs text-end text-blue-500">
-                          {new Date(e.createdAt).toLocaleTimeString("en-IN", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })}
+                          {new Date(message.createdAt).toLocaleTimeString(
+                            "en-IN",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            },
+                          )}
                         </p>
                       </span>
                     </div>
-                  ) : (
-                    ""
-                  ),
-                )
-              : ""}
+                  );
+                })
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center">
+                <p>No conversation yet</p>
+              </div>
+            )}
           </div>
 
           {/* =================================================
