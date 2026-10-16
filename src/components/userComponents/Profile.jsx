@@ -1,7 +1,11 @@
 import React from "react";
 import { User, Mail, Phone, Calendar, Edit3, Camera } from "lucide-react";
+import { useAuth } from "../../../contex/AuthContext";
 
 function Profile() {
+  const { loggedInUser } = useAuth();
+  console.log(loggedInUser);
+
   return (
     <div className="min-h-screen bg-slate-950 text-white px-4 py-6 sm:px-6 lg:px-10">
       {/* Main Container */}
@@ -57,7 +61,7 @@ function Profile() {
                   sm:h-32 sm:w-32
                 "
               >
-                K
+                {loggedInUser.name.charAt(0)}
               </div>
 
               {/* Camera Button */}
@@ -87,9 +91,11 @@ function Profile() {
               "
             >
               <div>
-                <h2 className="text-2xl font-bold">Kamran</h2>
+                <h2 className="text-2xl font-bold">{loggedInUser.name}</h2>
 
-                <p className="text-sm text-indigo-400">@kamran</p>
+                <p className="text-sm text-indigo-400">
+                  {loggedInUser.username}
+                </p>
 
                 <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
                   Developer, learner and tech enthusiast. Building things and
@@ -159,7 +165,7 @@ function Profile() {
               <InfoItem
                 icon={<Mail size={18} />}
                 title="Email"
-                value="kamran@example.com"
+                value={loggedInUser.email}
               />
 
               <InfoItem
