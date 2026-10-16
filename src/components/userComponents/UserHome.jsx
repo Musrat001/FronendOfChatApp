@@ -8,6 +8,7 @@ import {
   MoreVertical,
   Menu,
   ArrowLeft,
+  Plus,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -30,26 +31,20 @@ function UserHome() {
   // store the text currenlty the user sending
   const [text, setText] = useState("");
 
+  // storing file
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      console.log(file);
+    }
+  };
+
   // store message array
   const [messages, setMessages] = useState([]);
 
   // Added only for responsive mobile navigation.
   const [mobileChatView, setMobileChatView] = useState("list");
-
-  //   socket.on("connect", () => {
-  //     console.log("Socket connected:", socket.id);
-  //   });
-
-  //   socket.on("disconnect", () => {
-  //     console.log("Socket disconnected");
-  //   });
-
-  //   return () => {
-  //     socket.off("connect");
-  //     socket.off("disconnect");
-  //     socket.disconnect();
-  //   };
-  // }, []);
 
   const openMobileChat = (chat) => {
     setSelectedUser(chat);
@@ -139,6 +134,10 @@ function UserHome() {
       text: text,
       receiverId: selectedUser._id,
     };
+
+    if (!text.trim().length() > 0) {
+      alert("message cannot me Empty");
+    }
 
     try {
       const responce = await fetch(
@@ -706,6 +705,22 @@ function UserHome() {
           "
           >
             <div className="flex items-center gap-2 sm:gap-3">
+              <div>
+                <input
+                  type="file"
+                  id="image-upload"
+                  accept="image/*"
+                  hidden
+                  onChange={handleImageChange}
+                />
+
+                <label
+                  htmlFor="image-upload"
+                  className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-gray-200 transition"
+                >
+                  <Plus size={24} />
+                </label>
+              </div>
               <input
                 type="text"
                 placeholder="Write a message..."
