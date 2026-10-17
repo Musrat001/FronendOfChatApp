@@ -31,11 +31,15 @@ function UserHome() {
   // store the text currenlty the user sending
   const [text, setText] = useState("");
 
+  // Store the image to a variable
+  const [image, setImage] = useState(null);
+
   // storing file
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
+      setImage(file);
       console.log(file);
     }
   };
@@ -126,44 +130,77 @@ function UserHome() {
   };
 
   // sending current messages (text) to selected user.
-  const sendMessage = async (e) => {
-    // console.log("text: ", text);
-    // console.log("receiverId", selectedUser._id);
+  const sendMessage = async () => {
+    // console.log("Text:", text);
+    // console.log("Selected User:", selectedUser?._id);
+    // console.log("Selected Image:", image);
+    // console.log("Image Name:", image?.name);
+    // console.log("Image Size:", image?.size);
+    // 1. Validate message
+    if ((!text.trim() && !image) || !selectedUser?._id) {
+      return;
+    }
 
-    const messageObj = {
-      text: text,
-      receiverId: selectedUser._id,
-    };
+    // 2. Create FormData
+    const formData = new FormData();
 
-    // if (!text.trim().length() > 0) {
-    //   alert("message cannot me Empty");
-    // }
+    // 3. Append message text
+    formData.append("text", text.trim());
+
+    // 4. Append receiver ID
+    formData.append("receiverId", selectedUser._id);
+
+    // 5. Append image only if selected
+    if (image) {
+      formData.append("image", image);
+    }
 
     try {
-      const responce = await fetch(
-        `http://localhost:9838/api/v1/message/send`,
+      // 6. Send request
+      const response = await fetch(
+        "http://localhost:9838/api/v1/message/send",
         {
           method: "POST",
-          headers: {
-            "content-Type": "application/json",
-          },
-          body: JSON.stringify(messageObj),
+          body: formData,
           credentials: "include",
         },
       );
-      if (!responce.ok) {
-        throw new Error(`HTTP Error: ${responce.status}`);
+
+      // 7. Check response
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
       }
 
-      const data = await responce.json();
+      // 8. Convert response to JSON
+      const data = await response.json();
 
+      console.log("Send Message Response:", data);
+
+      // 9. Update message state
       if (data.success) {
-        setMessages((prev) => [...prev, data.message]);
+        // Replace data.message if your backend uses another property
+        const newMessage = data.message;
+
+        if (newMessage?._id) {
+          setMessages((prevMessages) => {
+            const alreadyExists = prevMessages.some(
+              (msg) => msg?._id === newMessage._id,
+            );
+
+            if (alreadyExists) {
+              return prevMessages;
+            }
+
+            return [...prevMessages, newMessage];
+          });
+        }
+
+        // 10. Clear input states
         setText("");
+        setImage(null);
       }
     } catch (error) {
-      console.log("Error wile sending message", error);
-      setText(null);
+      console.error("Error while sending message:", error);
     }
   };
 
@@ -649,7 +686,8 @@ function UserHome() {
           "
           >
             {messages.length > 0 ? (
-              [...messages].filter(Boolean)
+              [...messages]
+                .filter(Boolean)
                 .sort(
                   (a, b) =>
                     new Date(a.createdAt).getTime() -
@@ -670,7 +708,21 @@ function UserHome() {
                           isReceived ? "bg-amber-100" : "bg-gray-200"
                         }`}
                       >
-                        {message.text}
+                        {/* Display text only when available */}
+                        {message.text && (
+                          <p className="wrap-break-word whitespace-pre-wrap">
+                            {message.text}
+                          </p>
+                        )}
+
+                        {/* Display image only when available */}
+                        {message.image && (
+                          <img
+                            src={message.image}
+                            alt="Shared image"
+                            className="mt-2 max-h-64 max-w-full rounded-lg object-contain"
+                          />
+                        )}
 
                         <p className="text-xs text-end text-blue-500">
                           {new Date(message.createdAt).toLocaleTimeString(
