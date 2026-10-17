@@ -135,9 +135,9 @@ function UserHome() {
       receiverId: selectedUser._id,
     };
 
-    if (!text.trim().length() > 0) {
-      alert("message cannot me Empty");
-    }
+    // if (!text.trim().length() > 0) {
+    //   alert("message cannot me Empty");
+    // }
 
     try {
       const responce = await fetch(
@@ -158,7 +158,7 @@ function UserHome() {
       const data = await responce.json();
 
       if (data.success) {
-        setMessages((prev) => [...prev, data.text]);
+        setMessages((prev) => [...prev, data.message]);
         setText("");
       }
     } catch (error) {
@@ -649,7 +649,7 @@ function UserHome() {
           "
           >
             {messages.length > 0 ? (
-              [...messages]
+              [...messages].filter(Boolean)
                 .sort(
                   (a, b) =>
                     new Date(a.createdAt).getTime() -
