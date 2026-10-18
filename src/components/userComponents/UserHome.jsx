@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 // import { io } from "socket.io-client";
 import { useAuth } from "../../../contex/AuthContext";
 import { socket } from "../../../socket/socket.js";
+import {API_BASE_URL} from "../../config/Api.routes.js"
 
 // console.log(loggedInUser);
 
@@ -64,7 +65,7 @@ function UserHome() {
   const getCurrentUser = async () => {
     try {
       const response = await fetch(
-        "http://localhost:9838/api/v1/message/users",
+        `${API_BASE_URL}/api/v1/message/users`,
         {
           credentials: "include",
         },
@@ -100,7 +101,7 @@ function UserHome() {
   const getConversationOfSelectedUser = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9838/api/v1/message/receivedMessage/${selectedUser._id}`,
+        `${API_BASE_URL}/api/v1/message/receivedMessage/${selectedUser._id}`,
         {
           credentials: "include",
         },
@@ -158,7 +159,7 @@ function UserHome() {
     try {
       // 6. Send request
       const response = await fetch(
-        "http://localhost:9838/api/v1/message/send",
+        `${API_BASE_URL}/api/v1/message/send`,
         {
           method: "POST",
           body: formData,
@@ -206,7 +207,7 @@ function UserHome() {
 
   const logOut = async () => {
     try {
-      const response = await fetch(`http://localhost:9838/api/v1/auth/logout`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
         credentials: "include",
       });
 

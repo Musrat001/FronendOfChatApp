@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { API_BASE_URL } from "../../config/Api.routes.js";
 
 function Login() {
   // const url = "https://backendofchatapp-vpla.onrender.com";
   const navigate = useNavigate();
-  const localUrl = "http://localhost:9838/api/v1/auth/signIn";
+  // const localUrl = "http://localhost:9838/api/v1/auth/signIn";
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +18,10 @@ function Login() {
       identifier,
       password,
     };
-
-    
+    console.log("Actual login url: ", `${API_BASE_URL}/api/v1/auth/signIn`);
 
     try {
-      const response = await fetch(`${localUrl}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/signIn`, {
         method: "POST",
         headers: {
           "content-Type": "application/json",
