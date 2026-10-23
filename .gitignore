@@ -23,7 +23,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-# Environment variables
+# Ignore environment files
 .env
 .env.*
 
