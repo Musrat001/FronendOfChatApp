@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 // import { io } from "socket.io-client";
 import { useAuth } from "../../../contex/AuthContext";
 import { socket } from "../../../socket/socket.js";
-import {API_BASE_URL} from "../../config/Api.routes.js"
+import { API_BASE_URL } from "../../config/Api.routes.js";
 
 // console.log(loggedInUser);
 
@@ -64,12 +64,9 @@ function UserHome() {
 
   const getCurrentUser = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/message/users`,
-        {
-          credentials: "include",
-        },
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v1/message/users`, {
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
@@ -158,14 +155,11 @@ function UserHome() {
 
     try {
       // 6. Send request
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/message/send`,
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        },
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v1/message/send`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
 
       // 7. Check response
       if (!response.ok) {
@@ -758,22 +752,27 @@ function UserHome() {
           "
           >
             <div className="flex items-center gap-2 sm:gap-3">
-              <div>
-                <input
-                  type="file"
-                  id="image-upload"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageChange}
-                />
+              {image ? (
+                <h5 className="text-red-600 py-0.5 px-0.5">Image Selcted</h5>
+              ) : (
+                <div>
+                  <input
+                    type="file"
+                    id="image-upload"
+                    accept="image/*"
+                    hidden
+                    onChange={handleImageChange}
+                  />
 
-                <label
-                  htmlFor="image-upload"
-                  className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-gray-200 transition"
-                >
-                  <Plus size={24} />
-                </label>
-              </div>
+                  <label
+                    htmlFor="image-upload"
+                    className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-gray-200 transition"
+                  >
+                    <Plus size={24} />
+                  </label>
+                </div>
+              )}
+
               <input
                 type="text"
                 placeholder="Write a message..."
