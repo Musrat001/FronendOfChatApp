@@ -16,7 +16,8 @@ import { useState, useEffect } from "react";
 // import { io } from "socket.io-client";
 import { useAuth } from "../../../contex/AuthContext";
 import { socket } from "../../../socket/socket.js";
-import { API_BASE_URL } from "../../config/Api.routes.js";
+import { API_BASE_URL } from "./config/Api.routes.js";
+import { subscribeToPushNotifications } from "../../utils/pushNotification.js";
 
 // console.log(loggedInUser);
 
@@ -295,6 +296,22 @@ function UserHome() {
     getConversationOfSelectedUser();
   }, [selectedUser]);
 
+  // check the notification ush feature
+
+  async function handleEnableNotifications() {
+    try {
+      const subscription = await subscribeToPushNotifications();
+
+      console.log("Push subscription created:", subscription);
+
+      alert("Browser notifications enabled successfully!");
+    } catch (error) {
+      console.error("Push subscription failed:", error);
+
+      alert(error.message);
+    }
+  }
+
   console.log("Selected User:", selectedUser);
   console.log("Messages:", messages);
 
@@ -394,6 +411,9 @@ function UserHome() {
           onClick={logOut}
         >
           <LogOut size={19} />
+        </button>
+        <button onClick={handleEnableNotifications}>
+          Enable Notifications
         </button>
       </aside>
 

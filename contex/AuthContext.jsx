@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {API_BASE_URL} from "../src/config/Api.routes.js"
+import { API_BASE_URL } from "../src/components/userComponents/config/Api.routes.js";
 
 const AuthContext = createContext(null);
 
@@ -9,12 +9,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/getMe`,
-          {
-            credentials: "include",
-          },
-        );
+        const response = await fetch(`${API_BASE_URL}/api/v1/auth/getMe`, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch logged-in user");
