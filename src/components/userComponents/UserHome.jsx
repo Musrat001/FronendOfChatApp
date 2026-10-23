@@ -9,6 +9,8 @@ import {
   Menu,
   ArrowLeft,
   Plus,
+  Bell,
+  X,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -60,6 +62,10 @@ function UserHome() {
   const showMobileUserList = () => {
     setMobileChatView("list");
   };
+  // isSidebarOpen
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // get users just After logged In
 
@@ -319,108 +325,26 @@ function UserHome() {
     <div
       className={`relative h-dvh min-h-0 bg-slate-100 p-0 flex gap-0 overflow-hidden
         sm:h-screen sm:p-2 sm:gap-2 md:gap-3
-        ${mobileChatView === "chat" ? "mobile-chat-active" : "mobile-list-active"}`}
+        ${mobileChatView === "chat" ? "mobile-chat-active" : "mobile-list-active"}
+        ${isSidebarOpen ? "hidden" : "bg-red-300"}`}
     >
-      {/* Added responsive hamburger control for phones. */}
-      <button
-        type="button"
-        aria-label="Open conversations list"
-        className="fixed left-3 top-3 z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg sm:hidden"
-        onClick={showMobileUserList}
-      >
-        <Menu size={22} />
-      </button>
-
       {/* =====================================================
           SIDEBAR
       ===================================================== */}
 
-      <aside
-        className="
-          sm:flex w-14 sm:w-16 lg:w-20
-          shrink-0
-          bg-slate-900
-          rounded-xl sm:rounded-2xl
-          flex flex-col items-center justify-between
-          py-3 sm:py-5
-          shadow-lg
-        "
-      >
-        {/* Profile + Navigation */}
-        <div className="flex flex-col items-center gap-5 sm:gap-8">
-          {/* Profile */}
-          <NavLink
-            to="/profile"
-            className="
-              w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-              rounded-full
-              bg-blue-600
-              flex items-center justify-center
-              text-white
-              hover:bg-blue-700
-              transition
-            "
-          >
-            <User size={18} />
-          </NavLink>
+      {/* Mobile Menu Button */}
 
-          {/* Navigation */}
-          <nav className="flex flex-col gap-2 sm:gap-4">
-            <NavLink
-              to="/"
-              className="
-                w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-                rounded-lg sm:rounded-xl
-                bg-blue-600
-                text-white
-                flex items-center justify-center
-              "
-            >
-              <Home size={19} />
-            </NavLink>
-
-            <button
-              type="button"
-              className="
-                w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-                rounded-lg sm:rounded-xl
-                text-slate-400
-                hover:bg-slate-800
-                hover:text-white
-                flex items-center justify-center
-                transition
-              "
-            >
-              <Settings size={19} />
-            </button>
-          </nav>
-        </div>
-
-        {/* Logout */}
-        <button
-          type="button"
-          className="
-            w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12
-            rounded-lg sm:rounded-xl
-            text-slate-400
-            hover:bg-red-500/20
-            hover:text-red-400
-            flex items-center justify-center
-            transition
-          "
-          onClick={logOut}
-        >
-          <LogOut size={19} />
-        </button>
-        <button onClick={handleEnableNotifications}>
-          Enable Notifications
-        </button>
-      </aside>
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 sm:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
 
       {/* =====================================================
           CHAT LIST
       ===================================================== */}
-
       <section
         className={`w-full sm:w-72
           ${mobileChatView === "chat" ? "hidden sm:flex" : "flex"}
@@ -501,6 +425,8 @@ function UserHome() {
                     border-b border-slate-100
                     hover:bg-slate-50
                     transition
+                    
+                    
 
                     ${
                       index === 0
@@ -588,11 +514,9 @@ function UserHome() {
           )}
         </div>
       </section>
-
       {/* =====================================================
           CHAT WINDOW
       ===================================================== */}
-
       {selectedUser ? (
         <main
           className={`${
@@ -670,20 +594,141 @@ function UserHome() {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
+            <div className="relative flex items-center gap-0.5 sm:gap-2 shrink-0">
+              {/* Menu Button */}
               <button
                 type="button"
+                aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
+                onClick={() => setIsMenuOpen((prev) => !prev)}
                 className="
-                w-8 h-8 sm:w-10 sm:h-10
-                rounded-lg
-                hover:bg-slate-100
-                text-slate-500
-                flex items-center justify-center
-                transition
-              "
+                  w-9 h-9 sm:w-10 sm:h-10
+                  rounded-lg
+                  hover:bg-slate-100
+                  text-slate-500
+                  flex items-center justify-center
+                  transition
+                "
               >
-                <MoreVertical size={18} />
+                <Menu size={20} />
               </button>
+
+              {/* Dropdown Menu */}
+              {isMenuOpen && (
+                <>
+                  {/* Close dropdown when clicking outside */}
+                  <button
+                    type="button"
+                    aria-label="Close menu"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="fixed inset-0 z-40 cursor-default"
+                  />
+
+                  {/* Dropdown Content */}
+                  <div
+                    className="
+                      absolute right-0 top-full mt-2
+                      z-50
+                      w-56 sm:w-64
+                      max-w-[calc(100vw-1.5rem)]
+                      rounded-2xl
+                      border border-slate-200
+                      bg-slate-900
+                      p-2
+                      shadow-xl
+                    "
+                  >
+                    {/* Profile */}
+                    <NavLink
+                      to="/profile"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                      flex items-center gap-3
+                      rounded-xl px-3 py-3
+                      text-white
+                      hover:bg-slate-800
+                      transition
+                        "
+                    >
+                      <User size={20} className="text-blue-400" />
+                      <span className="text-sm font-medium">Profile</span>
+                    </NavLink>
+
+                    {/* Home */}
+                    <NavLink
+                      to="/"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                        flex items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-white
+                        hover:bg-slate-800
+                        transition
+                      "
+                    >
+                      <Home size={20} className="text-blue-400" />
+                      <span className="text-sm font-medium">Home</span>
+                    </NavLink>
+
+                    {/* Settings */}
+                    <button
+                      type="button"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-slate-300
+                        hover:bg-slate-800 hover:text-white
+                        transition
+                      "
+                    >
+                      <Settings size={20} />
+                      <span className="text-sm font-medium">Settings</span>
+                    </button>
+
+                    {/* Divider */}
+                    <div className="my-1 border-t border-slate-700" />
+
+                    {/* Notifications */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleEnableNotifications();
+                      }}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-amber-400
+                        hover:bg-slate-800
+                        transition
+                      "
+                    >
+                      <Bell size={20} />
+                      <span className="text-sm font-medium">Notifications</span>
+                    </button>
+
+                    {/* Logout */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        logOut();
+                      }}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-red-400
+                        hover:bg-red-500/10
+                        transition
+                      "
+                    >
+                      <LogOut size={20} />
+                      <span className="text-sm font-medium">Logout</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </header>
 
