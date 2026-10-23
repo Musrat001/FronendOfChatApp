@@ -24,6 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 
-/.env.local.api
-/.env.production.api
+./env.local
+./env.production
+
 
