@@ -1,4 +1,4 @@
-import "./App.css";
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -14,6 +14,7 @@ import Profile from "./components/userComponents/Profile";
 import UserLayout from "./layouts/user/UserLayout";
 import Dashboard from "./components/userComponents/Dashboard";
 import UserHome from "./components/userComponents/UserHome";
+import ForgetPassowrd from "./pages/ForgetPassowrd";
 
 function App() {
   const router = createBrowserRouter(
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgetPassowrd />} />
         </Route>
         <Route element={<UserLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
