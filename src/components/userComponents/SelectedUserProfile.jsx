@@ -1,0 +1,516 @@
+import React, { useEffect } from "react";
+import { User, Mail, Phone, Calendar, Edit3, Camera } from "lucide-react";
+// import { useAuth } from "../../../contex/AuthContext";
+import { useState } from "react";
+// import { useProfile } from "../../../contex/ProfileContext";
+import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "./config/Api.routes";
+
+function SelectedUserProfile() {
+  const [selectedUserProfile, setSelectedUserProfile] = useState(null);
+  const { id } = useParams();
+  console.log(
+    "SelectedUser Id Inside the Selected User Profile Component: ",
+    id,
+  );
+
+  const getSelectedUserProfile = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/profile/getProfile/${id}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("API Response of selected user:", data);
+
+      // API response:
+      // {
+      //   success: true,
+      //   users: [...]
+      // }
+
+      if (data.success) {
+        setSelectedUserProfile(data.userProfile);
+      } else {
+        setSelectedUserProfile([]);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setSelectedUserProfile([]);
+    }
+  };
+
+  useEffect(() => {
+    getSelectedUserProfile();
+  }, []);
+
+  //   console.log(loggedInUser);
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleProfileImage = (e) => {
+    setProfileImage(e.target.value);
+  };
+
+  console.log("Selected profile image", profileImage);
+
+  return (
+    // <div className="min-h-screen bg-slate-950 text-white px-4 py-6 sm:px-6 lg:px-10">
+    //   {/* Main Container */}
+    //   <div className="mx-auto max-w-6xl">
+    //     {/* Header */}
+    //     <div className="mb-6 flex items-center justify-between">
+    //       <div>
+    //         <h1 className="text-2xl font-bold sm:text-3xl">My Profile</h1>
+
+    //         <p className="mt-1 text-sm text-slate-400">
+    //           Manage your ChapApp profile
+    //         </p>
+    //       </div>
+    //     </div>
+
+    //     {/* Profile Card */}
+    //     <div
+    //       className="
+    //         overflow-hidden rounded-3xl
+    //         border border-slate-800
+    //         bg-slate-900/70
+    //         shadow-2xl shadow-black/20
+    //         backdrop-blur-xl
+    //       "
+    //     >
+    //       {/* Cover */}
+    //       <div
+    //         className="
+    //           relative h-32
+    //           bg-linear-to-r
+    //           from-indigo-600
+    //           via-purple-600
+    //           to-pink-600
+    //           sm:h-40
+    //         "
+    //       >
+    //         <div className="absolute inset-0 bg-black/20" />
+    //       </div>
+
+    //       {/* Profile Content */}
+    //       <div className="px-5 pb-6 sm:px-8">
+    //         {/* Avatar */}
+    //         <div className="relative -mt-14 mb-4 w-fit sm:-mt-16">
+    //           <div
+    //             className="
+    //               flex h-28 w-28
+    //               items-center justify-center
+    //               overflow-hidden rounded-full
+    //               border-4 border-slate-900
+    //               bg-indigo-600
+    //               text-4xl font-bold
+    //               shadow-xl
+    //               sm:h-32 sm:w-32
+    //             "
+    //           >
+    //             {loggedInUser.avatar ? (
+    //               <img src={avatar || profileImage} />
+    //             ) : (
+    //               loggedInUser.name.charAt(0)
+    //             )}
+    //           </div>
+
+    //           {/* Camera Button */}
+    //           <button
+    //             className="
+    //               absolute bottom-1 right-1
+    //               flex h-9 w-9
+    //               items-center justify-center
+    //               rounded-full
+    //               border-4 border-slate-900
+    //               bg-indigo-600
+    //               text-white
+    //               transition
+    //               hover:bg-indigo-500
+    //             "
+    //           >
+    //             <input
+    //               type="file"
+    //               hidden
+    //               id="pro-image"
+    //               accept="image/*"
+    //               onChange={handleProfileImage}
+    //             />
+    //             <label htmlFor="pro-image">
+    //               <Camera size={15} />
+    //             </label>
+    //           </button>
+    //         </div>
+
+    //         {/* Name + Edit */}
+    //         <div
+    //           className="
+    //             flex flex-col gap-4
+    //             sm:flex-row sm:items-start
+    //             sm:justify-between
+    //           "
+    //         >
+    //           <div>
+    //             <h2 className="text-2xl font-bold">{loggedInUser.name}</h2>
+
+    //             <p className="text-sm text-indigo-400">
+    //               {loggedInUser.username}
+    //             </p>
+
+    //             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
+    //               Developer, learner and tech enthusiast. Building things and
+    //               connecting with people.
+    //             </p>
+    //           </div>
+
+    //           <button
+    //             className="
+    //               flex w-full items-center justify-center
+    //               gap-2 rounded-xl
+    //               bg-indigo-600 px-5 py-3
+    //               text-sm font-medium
+    //               transition
+    //               hover:bg-indigo-500
+    //               sm:w-auto
+    //             "
+    //           >
+    //             <Edit3 size={17} />
+    //             Edit Profile
+    //           </button>
+    //         </div>
+    //       </div>
+    //     </div>
+
+    //     {/* Information Grid */}
+    //     <div
+    //       className="
+    //         mt-6 grid
+    //         grid-cols-1
+    //         gap-6
+    //         lg:grid-cols-2
+    //       "
+    //     >
+    //       {/* Personal Information */}
+    //       <div
+    //         className="
+    //           rounded-3xl
+    //           border border-slate-800
+    //           bg-slate-900/70
+    //           p-5
+    //           backdrop-blur-xl
+    //           sm:p-6
+    //         "
+    //       >
+    //         <div className="mb-6 flex items-center gap-3">
+    //           <div
+    //             className="
+    //               flex h-10 w-10
+    //               items-center justify-center
+    //               rounded-xl
+    //               bg-indigo-500/10
+    //               text-indigo-400
+    //             "
+    //           >
+    //             <User size={20} />
+    //           </div>
+
+    //           <div>
+    //             <h3 className="font-semibold">Personal Information</h3>
+
+    //             <p className="text-xs text-slate-500">Your account details</p>
+    //           </div>
+    //         </div>
+
+    //         <div className="space-y-5">
+    //           <InfoItem
+    //             icon={<Mail size={18} />}
+    //             title="Email"
+    //             value={loggedInUser.email}
+    //           />
+
+    //           <InfoItem
+    //             icon={<Phone size={18} />}
+    //             title="Phone"
+    //             value="+91 98765 43210"
+    //           />
+
+    //           <InfoItem
+    //             icon={<Calendar size={18} />}
+    //             title="Joined"
+    //             value="September 2026"
+    //           />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+    <h1>Profile</h1>
+  );
+}
+
+/* Information Item */
+function InfoItem({ icon, title, value }) {
+  return (
+    <div className="flex items-center gap-4">
+      <div
+        className="
+          flex h-10 w-10 shrink-0
+          items-center justify-center
+          rounded-xl
+          bg-slate-800
+          text-slate-400
+        "
+      >
+        {icon}
+      </div>
+
+      <div className="min-w-0">
+        <p className="text-xs text-slate-500">{title}</p>
+
+        <p className="truncate text-sm text-slate-200">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+export default SelectedUserProfile;
+
+// function Profile() {
+//   const { loggedInUser } = useAuth();
+//   console.log(loggedInUser);
+//   const [profileImage, setProfileImage] = useState(null);
+
+//   const handleProfileImage = (e) => {
+//     setProfileImage(e.target.value);
+//   };
+
+//   console.log("Selected profile image", profileImage);
+
+//   return (
+//     <div className="min-h-screen bg-slate-950 text-white px-4 py-6 sm:px-6 lg:px-10">
+//       {/* Main Container */}
+//       <div className="mx-auto max-w-6xl">
+//         {/* Header */}
+//         <div className="mb-6 flex items-center justify-between">
+//           <div>
+//             <h1 className="text-2xl font-bold sm:text-3xl">My Profile</h1>
+
+//             <p className="mt-1 text-sm text-slate-400">
+//               Manage your ChapApp profile
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* Profile Card */}
+//         <div
+//           className="
+//             overflow-hidden rounded-3xl
+//             border border-slate-800
+//             bg-slate-900/70
+//             shadow-2xl shadow-black/20
+//             backdrop-blur-xl
+//           "
+//         >
+//           {/* Cover */}
+//           <div
+//             className="
+//               relative h-32
+//               bg-linear-to-r
+//               from-indigo-600
+//               via-purple-600
+//               to-pink-600
+//               sm:h-40
+//             "
+//           >
+//             <div className="absolute inset-0 bg-black/20" />
+//           </div>
+
+//           {/* Profile Content */}
+//           <div className="px-5 pb-6 sm:px-8">
+//             {/* Avatar */}
+//             <div className="relative -mt-14 mb-4 w-fit sm:-mt-16">
+//               <div
+//                 className="
+//                   flex h-28 w-28
+//                   items-center justify-center
+//                   overflow-hidden rounded-full
+//                   border-4 border-slate-900
+//                   bg-indigo-600
+//                   text-4xl font-bold
+//                   shadow-xl
+//                   sm:h-32 sm:w-32
+//                 "
+//               >
+//                 {loggedInUser.avatar ? (
+//                   <img src={avatar || profileImage} />
+//                 ) : (
+//                   loggedInUser.name.charAt(0)
+//                 )}
+//               </div>
+
+//               {/* Camera Button */}
+//               <button
+//                 className="
+//                   absolute bottom-1 right-1
+//                   flex h-9 w-9
+//                   items-center justify-center
+//                   rounded-full
+//                   border-4 border-slate-900
+//                   bg-indigo-600
+//                   text-white
+//                   transition
+//                   hover:bg-indigo-500
+//                 "
+//               >
+//                 <input
+//                   type="file"
+//                   hidden
+//                   id="pro-image"
+//                   accept="image/*"
+//                   onChange={handleProfileImage}
+//                 />
+//                 <label htmlFor="pro-image">
+//                   <Camera size={15} />
+//                 </label>
+//               </button>
+//             </div>
+
+//             {/* Name + Edit */}
+//             <div
+//               className="
+//                 flex flex-col gap-4
+//                 sm:flex-row sm:items-start
+//                 sm:justify-between
+//               "
+//             >
+//               <div>
+//                 <h2 className="text-2xl font-bold">{loggedInUser.name}</h2>
+
+//                 <p className="text-sm text-indigo-400">
+//                   {loggedInUser.username}
+//                 </p>
+
+//                 <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
+//                   Developer, learner and tech enthusiast. Building things and
+//                   connecting with people.
+//                 </p>
+//               </div>
+
+//               <button
+//                 className="
+//                   flex w-full items-center justify-center
+//                   gap-2 rounded-xl
+//                   bg-indigo-600 px-5 py-3
+//                   text-sm font-medium
+//                   transition
+//                   hover:bg-indigo-500
+//                   sm:w-auto
+//                 "
+//               >
+//                 <Edit3 size={17} />
+//                 Edit Profile
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Information Grid */}
+//         <div
+//           className="
+//             mt-6 grid
+//             grid-cols-1
+//             gap-6
+//             lg:grid-cols-2
+//           "
+//         >
+//           {/* Personal Information */}
+//           <div
+//             className="
+//               rounded-3xl
+//               border border-slate-800
+//               bg-slate-900/70
+//               p-5
+//               backdrop-blur-xl
+//               sm:p-6
+//             "
+//           >
+//             <div className="mb-6 flex items-center gap-3">
+//               <div
+//                 className="
+//                   flex h-10 w-10
+//                   items-center justify-center
+//                   rounded-xl
+//                   bg-indigo-500/10
+//                   text-indigo-400
+//                 "
+//               >
+//                 <User size={20} />
+//               </div>
+
+//               <div>
+//                 <h3 className="font-semibold">Personal Information</h3>
+
+//                 <p className="text-xs text-slate-500">Your account details</p>
+//               </div>
+//             </div>
+
+//             <div className="space-y-5">
+//               <InfoItem
+//                 icon={<Mail size={18} />}
+//                 title="Email"
+//                 value={loggedInUser.email}
+//               />
+
+//               <InfoItem
+//                 icon={<Phone size={18} />}
+//                 title="Phone"
+//                 value="+91 98765 43210"
+//               />
+
+//               <InfoItem
+//                 icon={<Calendar size={18} />}
+//                 title="Joined"
+//                 value="September 2026"
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* Information Item */
+// function InfoItem({ icon, title, value }) {
+//   return (
+//     <div className="flex items-center gap-4">
+//       <div
+//         className="
+//           flex h-10 w-10 shrink-0
+//           items-center justify-center
+//           rounded-xl
+//           bg-slate-800
+//           text-slate-400
+//         "
+//       >
+//         {icon}
+//       </div>
+
+//       <div className="min-w-0">
+//         <p className="text-xs text-slate-500">{title}</p>
+
+//         <p className="truncate text-sm text-slate-200">{value}</p>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Profile;

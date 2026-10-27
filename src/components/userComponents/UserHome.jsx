@@ -65,7 +65,48 @@ function UserHome() {
   // isSidebarOpen
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // menu bar for logged in user
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // menu bar for selcted user
+  const [isMenuOpenOfSelectedUser, setIsMenuOpenOfSelectedUser] =
+    useState(false);
+  // storing selected user profile
+  const [selectedUserProfile, setSelectedUserProfile] = useState(null);
+
+  
+  const getSelectedUserProfile = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/profile/getProfile/${selectedUser._id}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("API Response:", data);
+
+      // API response:
+      // {
+      //   success: true,
+      //   users: [...]
+      // }
+
+      if (data.success && Array.isArray(data.userProfile)) {
+        setSelectedUserProfile(data.userProfile);
+      } else {
+        setSelectedUserProfile([]);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setSelectedUserProfile([]);
+    }
+  };
 
   // get users just After logged In
 
@@ -298,7 +339,7 @@ function UserHome() {
     if (!selectedUser?._id) return;
 
     setMessages([]);
-
+   
     getConversationOfSelectedUser();
   }, [selectedUser]);
 
@@ -319,6 +360,7 @@ function UserHome() {
   }
 
   console.log("Selected User:", selectedUser);
+  console.log("Selected User Profile:", selectedUserProfile);
   console.log("Messages:", messages);
 
   return (
@@ -363,6 +405,143 @@ function UserHome() {
               <p className="hidden sm:block text-sm text-slate-400">
                 Your conversations
               </p>
+            </div>
+            {/* Actions for LoggedIn user Profile*/}
+            <div className="relative flex items-center gap-0.5 sm:gap-2 shrink-0">
+              {/* Menu Button for LoggedIn user Profile */}
+              <button
+                type="button"
+                aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                className="
+                  w-9 h-9 sm:w-10 sm:h-10
+                  rounded-lg
+                  hover:bg-slate-100
+                  text-slate-500
+                  flex items-center justify-center
+                  transition
+                "
+              >
+                <Menu size={20} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isMenuOpen && (
+                <>
+                  {/* Close dropdown when clicking outside */}
+                  <button
+                    type="button"
+                    aria-label="Close menu"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="fixed inset-0 z-40 cursor-default"
+                  />
+
+                  {/* Dropdown Content */}
+                  <div
+                    className="
+                      absolute right-0 top-full mt-2
+                      z-50
+                      w-56 sm:w-64
+                      max-w-[calc(100vw-1.5rem)]
+                      rounded-2xl
+                      border border-slate-200
+                      bg-slate-900
+                      p-2
+                      shadow-xl
+                    "
+                  >
+                    {/* Profile */}
+                    <NavLink
+                      to="/profile"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                      flex items-center gap-3
+                      rounded-xl px-3 py-3
+                      text-white
+                      hover:bg-slate-800
+                      transition
+                        "
+                    >
+                      <User size={20} className="text-blue-400" />
+                      <span className="text-sm font-medium">Profile</span>
+                    </NavLink>
+
+                    {/* Home */}
+                    <NavLink
+                      to="/"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                        flex items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-white
+                        hover:bg-slate-800
+                        transition
+                      "
+                    >
+                      <Home size={20} className="text-blue-400" />
+                      <span className="text-sm font-medium">Home</span>
+                    </NavLink>
+
+                    {/* Settings */}
+                    <button
+                      type="button"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-slate-300
+                        hover:bg-slate-800 hover:text-white
+                        transition
+                      "
+                    >
+                      <Settings size={20} />
+                      <span className="text-sm font-medium">Settings</span>
+                    </button>
+
+                    {/* Divider */}
+                    <div className="my-1 border-t border-slate-700" />
+
+                    {/* Notifications */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleEnableNotifications();
+                      }}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-amber-400
+                        hover:bg-slate-800
+                        transition
+                      "
+                    >
+                      <Bell size={20} />
+                      <span className="text-sm font-medium">Notifications</span>
+                    </button>
+
+                    {/* Logout */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        logOut();
+                      }}
+                      className="
+                        flex w-full items-center gap-3
+                        rounded-xl px-3 py-3
+                        text-red-400
+                        hover:bg-red-500/10
+                        transition
+                      "
+                    >
+                      <LogOut size={20} />
+                      <span className="text-sm font-medium">Logout</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -593,14 +772,14 @@ function UserHome() {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* Actions for selected user profile */}
             <div className="relative flex items-center gap-0.5 sm:gap-2 shrink-0">
-              {/* Menu Button */}
+              {/* Menu Button for selected user profile */}
               <button
                 type="button"
                 aria-label="Toggle menu"
-                aria-expanded={isMenuOpen}
-                onClick={() => setIsMenuOpen((prev) => !prev)}
+                aria-expanded={isMenuOpenOfSelectedUser}
+                onClick={() => setIsMenuOpenOfSelectedUser((prev) => !prev)}
                 className="
                   w-9 h-9 sm:w-10 sm:h-10
                   rounded-lg
@@ -614,13 +793,13 @@ function UserHome() {
               </button>
 
               {/* Dropdown Menu */}
-              {isMenuOpen && (
+              {isMenuOpenOfSelectedUser && (
                 <>
                   {/* Close dropdown when clicking outside */}
                   <button
                     type="button"
                     aria-label="Close menu"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => setIsMenuOpenOfSelectedUser(false)}
                     className="fixed inset-0 z-40 cursor-default"
                   />
 
@@ -640,8 +819,11 @@ function UserHome() {
                   >
                     {/* Profile */}
                     <NavLink
-                      to="/profile"
-                      onClick={() => setIsMenuOpen(false)}
+                      to={`/selectedUserProfile/${selectedUser._id}`}
+                      onClick={() =>{setIsMenuOpenOfSelectedUser(false)
+                        // handleSelectedUserProfile();
+                      } }
+                      
                       className="
                       flex items-center gap-3
                       rounded-xl px-3 py-3
@@ -657,7 +839,7 @@ function UserHome() {
                     {/* Home */}
                     <NavLink
                       to="/"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => setIsMenuOpenOfSelectedUser(false)}
                       className="
                         flex items-center gap-3
                         rounded-xl px-3 py-3
@@ -673,7 +855,7 @@ function UserHome() {
                     {/* Settings */}
                     <button
                       type="button"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => setIsMenuOpenOfSelectedUser(false)}
                       className="
                         flex w-full items-center gap-3
                         rounded-xl px-3 py-3
@@ -693,7 +875,7 @@ function UserHome() {
                     <button
                       type="button"
                       onClick={() => {
-                        setIsMenuOpen(false);
+                        setIsMenuOpenOfSelectedUser(false);
                         handleEnableNotifications();
                       }}
                       className="
@@ -712,7 +894,7 @@ function UserHome() {
                     <button
                       type="button"
                       onClick={() => {
-                        setIsMenuOpen(false);
+                        setIsMenuOpenOfSelectedUser(false);
                         logOut();
                       }}
                       className="

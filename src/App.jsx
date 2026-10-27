@@ -15,6 +15,7 @@ import UserLayout from "./layouts/user/UserLayout";
 import Dashboard from "./components/userComponents/Dashboard";
 import UserHome from "./components/userComponents/UserHome";
 import ForgetPassowrd from "./pages/ForgetPassowrd";
+import SelectedUserProfile from "./components/userComponents/SelectedUserProfile";
 
 function App() {
   const router = createBrowserRouter(
@@ -30,6 +31,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/home" element={<UserHome />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/selectedUserProfile/:id" element={<SelectedUserProfile />} />
         </Route>
       </Route>,
     ),
