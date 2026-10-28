@@ -469,7 +469,7 @@ function UserHome() {
 
                     {/* Home */}
                     <NavLink
-                      to="/"
+                      to="/home"
                       onClick={() => setIsMenuOpen(false)}
                       className="
                         flex items-center gap-3
@@ -838,7 +838,7 @@ function UserHome() {
 
                     {/* Home */}
                     <NavLink
-                      to="/"
+                      to="/home"
                       onClick={() => setIsMenuOpenOfSelectedUser(false)}
                       className="
                         flex items-center gap-3

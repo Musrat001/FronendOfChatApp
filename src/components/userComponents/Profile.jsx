@@ -70,10 +70,10 @@ function Profile() {
                   sm:h-32 sm:w-32
                 "
               >
-                {loggedInUser.avatar ? (
+                {loggedInUser?.avatar ? (
                   <img src={avatar || profileImage} />
                 ) : (
-                  loggedInUser.name.charAt(0)
+                  loggedInUser?.name?.charAt(0)
                 )}
               </div>
 
@@ -113,10 +113,10 @@ function Profile() {
               "
             >
               <div>
-                <h2 className="text-2xl font-bold">{loggedInUser.name}</h2>
+                <h2 className="text-2xl font-bold">{loggedInUser?.name}</h2>
 
                 <p className="text-sm text-indigo-400">
-                  {loggedInUser.username}
+                  {loggedInUser?.username}
                 </p>
 
                 <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
@@ -187,7 +187,7 @@ function Profile() {
               <InfoItem
                 icon={<Mail size={18} />}
                 title="Email"
-                value={loggedInUser.email}
+                value={loggedInUser?.email}
               />
 
               <InfoItem
