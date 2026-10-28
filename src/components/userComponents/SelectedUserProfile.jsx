@@ -119,7 +119,7 @@ function SelectedUserProfile() {
                 "
               >
                 {selectedUserProfile?.avatar ? (
-                  <img src={avatar || profileImage} />
+                  <img src={selectedUserProfile.avatar || profileImage} />
                 ) : (
                   selectedUserProfile?.name?.charAt(0)
                 )}
