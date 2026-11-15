@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import {MessageCircle} from "lucide-react"
 
 function Footer() {
   return (
@@ -11,17 +12,19 @@ function Footer() {
 
           <div>
             <NavLink to="/" className="flex items-center gap-3 mb-4">
-              <div
-                className="w-15 h-15 rounded-xl bg-blue-600
-                       flex items-center justify-center
-                       text-white font-bold text-xl px-2"
-              >
-                E&C
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white  group-hover:scale-105 transition-transform duration-200">
+                <MessageCircle size={25} strokeWidth={2.3} />
               </div>
 
-              <span className="text-2xl font-bold text-white">
-                Egg&Code<span className="text-blue-500">ChatApp</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">
+                  Egg&Code
+                </span>
+
+                <span className="text-xs sm:text-sm font-semibold text-blue-600 tracking-wide">
+                  ChatApp
+                </span>
+              </div>
             </NavLink>
 
             <p className="text-sm text-gray-400 leading-6 max-w-xs">
@@ -141,7 +144,7 @@ function Footer() {
         <div className="border-t border-gray-800 mt-10 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="text-sm text-gray-500">
-              © 2026 Egg&OCode ChatApp. All rights reserved.
+              © 2026 Egg&Code ChatApp. All rights reserved.
             </p>
 
             <p className="text-sm text-gray-500">
