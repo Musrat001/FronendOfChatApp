@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {MessageCircle} from "lucide-react"
+import { MessageCircle } from "lucide-react";
 
 function Footer() {
   return (
@@ -104,7 +104,8 @@ function Footer() {
 
             <div className="flex gap-3">
               <a
-                href="#"
+                target="_blank"
+                href="https://www.linkedin.com/in/mohd-musrat"
                 className="w-10 h-10 rounded-lg bg-gray-800
                            flex items-center justify-center
                            text-sm font-semibold
@@ -126,7 +127,8 @@ function Footer() {
               </a>
 
               <a
-                href="#"
+                target="_blank"
+                href="https://github.com/Musrat001"
                 className="w-10 h-10 rounded-lg bg-gray-800
                            flex items-center justify-center
                            text-sm font-semibold
