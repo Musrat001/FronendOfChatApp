@@ -592,6 +592,7 @@ function UserHome() {
               const username = chat?.username || chat?.email || "No username";
 
               const avatarLetter = name.charAt(0).toUpperCase();
+              const avatar = chat.profile?.avatar;
 
               return (
                 <div
@@ -629,7 +630,7 @@ function UserHome() {
                         text-sm
                       "
                     >
-                      {avatarLetter}
+                     <img className="rounded-full" src={avatar || avatarLetter}/>
                     </div>
 
                     {/* Online indicator */}
@@ -735,10 +736,22 @@ function UserHome() {
                   font-semibold
                 "
                   >
-                    {selectedUser.name.charAt(0)}
+                    <img className="rounded-full" src={selectedUser?.profile?.avatar}/>
                   </div>
                 ) : (
-                  ""
+                  <div
+                    className="
+                  w-9 h-9
+                  sm:w-11 sm:h-11
+                  rounded-full
+                  bg-blue-100
+                  text-blue-600
+                  flex items-center justify-center
+                  font-semibold
+                "
+                  >
+                    {selectedUser.name.charAt(0)}
+                  </div>
                 )}
 
                 {/* <span
